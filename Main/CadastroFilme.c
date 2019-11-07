@@ -7,6 +7,10 @@
 #include "ClearScreen.h"
 #include "Filme.h"
 #include "TrimFunc.h"
+<<<<<<< HEAD
+=======
+#include "AddMovie.h"
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
 #include "ReadMovie.h"
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
@@ -19,17 +23,33 @@ void CadastrarFilme(void) {
     
     // Variables
     struct filme novoFilme = {0};
+<<<<<<< HEAD
     char option = 0;    
+=======
+    char option = 0;
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
     
     printf(BOLDBLACK "***** Cadastro de flmes - CFLIX *****\n" RESET);
     
     // Movie Name Function
+<<<<<<< HEAD
     ReadMovieName(NULL, &novoFilme);
     
     // Movie date Function
     ReadMovieDate(NULL, &novoFilme);
     
     // Movie duration Function
+=======
+//    AddMovieName(novoFilme);
+    ReadMovieName(NULL, &novoFilme);
+    
+    // Movie date Function
+//    AddMovieRelease(novoFilme);
+    ReadMovieDate(NULL, &novoFilme);
+    
+    // Movie duration Function
+//    AddMovieDuration(novoFilme);
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
     ReadMovieDuration(NULL, &novoFilme);
     
     // Movie confirmation Function

@@ -10,6 +10,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
+<<<<<<< HEAD
 void EditMovie(int index) {
     
     /* Variables */
@@ -30,10 +31,17 @@ void ReadMovieName(char *prevName, struct filme *movie) {
 
     if (prevName == NULL) {
 
+=======
+void ReadMovieName(char *prevName, struct filme *movie) {
+    char movieName[199], *newString;
+    
+    if (movie == 0) {
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
         do{
             printf(BOLDBLACK "\nNome do filme:\n" RESET);
             printf("-> ");
             fgets(movieName, sizeof(movieName), stdin);
+<<<<<<< HEAD
 
             newString = StringTrimmer(movieName);
             TrimTrailing(newString);
@@ -58,6 +66,32 @@ void ReadMovieName(char *prevName, struct filme *movie) {
 
                 strcpy(movie->nomeFilme, newString);
 
+=======
+            
+            newString = StringTrimmer(movieName);
+            TrimTrailing(newString);
+            
+            if (movieName[0] == '\n' || movieName[0] == ' ') {
+                printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
+            }
+            
+            strcpy(movie->nomeFilme, newString);
+        } while(movieName[0] == '\n' || movieName[0] == ' ');
+        
+    } else {
+        
+        do{
+            printf(BOLDBLACK "\nNome do filme [%s]: " RESET, movie->nomeFilme);
+            fgets(movieName, sizeof(movieName), stdin);
+            
+            if (strcmp(movieName, "\n") != 0) {
+                
+                newString = StringTrimmer(movieName);
+                TrimTrailing(newString);
+                
+                strcpy(movie->nomeFilme, newString);
+                
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
                 printf("Nome: %s\n", movie->nomeFilme);
             }
         } while((strcmp(movieName, "\n") != 0) && (strcmp(movieName, "\n") == 0));
@@ -69,12 +103,18 @@ void ReadMovieDate(long *prevDate, struct filme *movie) {
     struct tm dataStrct = {0};
     int comp = 0;
     time_t r;
+<<<<<<< HEAD
 
     if (prevDate == NULL) {
+=======
+    
+    if (movie == 0) {
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
         do{
             printf(BOLDBLACK "Data de lançamento:(dd/mm/yyyy)\n" RESET);
             printf("-> ");
             fgets(dataInicial, 11, stdin);
+<<<<<<< HEAD
 
             if (!(strchr(dataInicial, '\n'))) {
                 while (fgetc(stdin) != '\n');
@@ -121,6 +161,54 @@ void ReadMovieDate(long *prevDate, struct filme *movie) {
                     printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
                 }
 
+=======
+            
+            if (!(strchr(dataInicial, '\n'))) {
+                while (fgetc(stdin) != '\n');
+            }
+            
+            strcpy(dataComp, dataInicial);
+            
+            strptime(dataInicial, "%d/%m/%Y", &dataStrct);
+            r = mktime(&dataStrct);
+            strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
+            
+            if ((comp = strcmp(dataInicial, dataComp)) != 0) {
+                printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
+            }
+            
+            movie->dataLancamento = r;
+        } while((comp = strcmp(dataInicial, dataComp)) != 0);
+        
+    } else {
+        
+        struct tm dataStrct = {0};
+        time_t r, data = 0;
+        struct tm ts = {0};
+        
+        int comp = 0;
+        char dataFinal[11], dataInicial[11], dataComp[11];
+        
+        data = movie->dataLancamento;
+        ts = *localtime(&data);
+        strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(&movie->dataLancamento));
+        
+        do{
+            printf(BOLDBLACK "\nData de lançamento[%s]: " RESET, dataFinal);
+            fgets(dataInicial, 11, stdin);
+            
+            if (strcmp(dataInicial, "\n") != 0) {
+                strcpy(dataComp, dataInicial);
+                
+                strptime(dataInicial, "%d/%m/%Y", &dataStrct);
+                r = mktime(&dataStrct);
+                strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
+                
+                if ((comp = strcmp(dataInicial, dataComp)) != 0) {
+                    printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
+                }
+                
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
                 movie->dataLancamento = r;
                 fseek(stdin, 0, SEEK_END);
             } else {
@@ -134,9 +222,15 @@ void ReadMovieDuration(int *prevDuration, struct filme *movie) {
     int validDigit = 0;
     char duracao[5];
     int duracaoValid = 0;
+<<<<<<< HEAD
 
     if (prevDuration == NULL) {
 
+=======
+    
+    if (movie == 0) {
+        
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
         do{
             printf(BOLDBLACK "Duração em minutos:\n" RESET);
             printf("-> ");
@@ -148,6 +242,7 @@ void ReadMovieDuration(int *prevDuration, struct filme *movie) {
                 printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                 validDigit = scanf("%d", &duracaoValid);
             }
+<<<<<<< HEAD
 
             movie->duracaoFilme = duracaoValid;
             ClearScreen();
@@ -155,15 +250,32 @@ void ReadMovieDuration(int *prevDuration, struct filme *movie) {
 
     } else {
 
+=======
+            
+            movie->duracaoFilme = duracaoValid;
+            ClearScreen();
+        }while(validDigit != 1);
+        
+    } else {
+        
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
         /* Duration Edition Segment */
         do {
             printf(BOLDBLACK "\nDuração[%d]: " RESET, movie->duracaoFilme);
             fgets(duracao, sizeof(duracao), stdin);
+<<<<<<< HEAD
 
             if (duracao[0] != '\n') {
                 duracao[strlen(duracao) - 1] = 0;
                 int j = atoi(duracao);
 
+=======
+            
+            if (duracao[0] != '\n') {
+                duracao[strlen(duracao) - 1] = 0;
+                int j = atoi(duracao);
+                
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
                 movie->duracaoFilme = j;
             } else {
                 break;
@@ -171,6 +283,7 @@ void ReadMovieDuration(int *prevDuration, struct filme *movie) {
         } while(duracao[0] == '\n');
     }
 }
+<<<<<<< HEAD
 
 /* Movie Confirmation */
 void MovieConfirmation(struct filme novoFilme) {
@@ -245,3 +358,5 @@ void MovieList() {
         }
     }
 }
+=======
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4

@@ -3,6 +3,27 @@
 #include <string.h>
 #include "Filme.h"
 
+<<<<<<< HEAD
+=======
+void RemoveMovieTESTE(struct Array *a, int index) {
+    int i, j = 0;
+    
+    struct filme *temp = malloc(sizeof(a->p));
+    
+    for (i = 1; i <= a->count; i++) {
+        if (i != index) {
+            temp[j] = a->p[i];
+            j++;
+        }
+    }
+    
+    a->count = a->count - 1;
+    a->reserved = a->count;
+    free(a->p);
+    a->p = temp;
+}
+
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
 void RemoveMovie(struct Array *a, int index) {
     int i, j = 0;
     

@@ -6,6 +6,11 @@
 #include "ClearScreen.h"
 #include "Filme.h"
 #include "TrimFunc.h"
+<<<<<<< HEAD
+=======
+#include "AddMovie.h"
+#include "EditMovie.h"
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
 #include "ReadMovie.h"
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
@@ -61,7 +66,14 @@ void EditarFilme() {
                     scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
 
+<<<<<<< HEAD
                     EditMovie(id);
+=======
+//                    EditMovie(id - 1);
+                    ReadMovieName(filmeEdit->p->nomeFilme, filmeEdit->p);
+                    ReadMovieDate(&filmeEdit->p->dataLancamento, filmeEdit->p);
+                    ReadMovieDuration(&filmeEdit->p->duracaoFilme, filmeEdit->p);
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
                     MovieList();
                     
                     break;

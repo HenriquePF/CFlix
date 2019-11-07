@@ -10,6 +10,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
+<<<<<<< HEAD
 //void AddMovieName(struct filme);
 //
 //void AddMovieRelease(struct filme);
@@ -19,3 +20,14 @@
 //void MovieList(void);
 //
 //void MovieConfirmation(struct filme);
+=======
+void AddMovieName(struct filme);
+
+void AddMovieRelease(struct filme);
+
+void AddMovieDuration(struct filme);
+
+void MovieList(void);
+
+void MovieConfirmation(struct filme);
+>>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
