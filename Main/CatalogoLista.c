@@ -6,10 +6,6 @@
 #include "TelaMain.h"
 #include "ClearScreen.h"
 #include "Filme.h"
-<<<<<<< HEAD
-=======
-#include "AddMovie.h"
->>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
 #define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */

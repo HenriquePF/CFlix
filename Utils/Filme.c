@@ -3,8 +3,6 @@
 #include <string.h>
 #include "Filme.h"
 
-<<<<<<< HEAD
-=======
 void RemoveMovieTESTE(struct Array *a, int index) {
     int i, j = 0;
     
@@ -23,7 +21,6 @@ void RemoveMovieTESTE(struct Array *a, int index) {
     a->p = temp;
 }
 
->>>>>>> 273ee77a5cfdc30de593f8191f8d4900e92564c4
 void RemoveMovie(struct Array *a, int index) {
     int i, j = 0;
     
