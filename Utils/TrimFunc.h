@@ -1,0 +1,10 @@
+#ifndef trimFunc_h
+#define trimFunc_h
+
+#include <stdio.h>
+
+char *StringTrimmer(char *text);
+
+void TrimTrailing(char *nomeFilme);
+
+#endif
