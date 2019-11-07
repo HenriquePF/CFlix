@@ -17,7 +17,7 @@ void ExcluirFilme() {
     char option = 0, delOption = 0;
     int index = 0;
     struct Array *filmes = GetFilmes();
-
+    
     printf(BOLDBLACK "***** Excluir filme - CFLIX *****\n" RESET);
     
     MovieList();
@@ -82,7 +82,7 @@ void ExcluirFilme() {
                 case '2':
                     return CatalogoLista();
                     
-                	default:
+                default:
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }

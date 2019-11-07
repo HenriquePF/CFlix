@@ -23,6 +23,7 @@ void EditMovie(int index) {
 }
 
 void ReadMovieName(char *prevName, struct filme *movie) {
+    
     char movieName[199], *newString;
     
     if (prevName == NULL) {
@@ -53,8 +54,6 @@ void ReadMovieName(char *prevName, struct filme *movie) {
                 TrimTrailing(newString);
                 
                 strcpy(movie->nomeFilme, newString);
-                
-                printf("Nome: %s\n", movie->nomeFilme);
             }
         } while((strcmp(movieName, "\n") != 0) && (strcmp(movieName, "\n") == 0));
     }
@@ -66,7 +65,7 @@ void ReadMovieDate(long *prevDate, struct filme *movie) {
     int comp = 0;
     time_t r;
     
-    if (prevDate == 0) {
+    if (prevDate == NULL) {
         do{
             printf(BOLDBLACK "Data de lançamento:(dd/mm/yyyy)\n" RESET);
             printf("-> ");
@@ -131,7 +130,7 @@ void ReadMovieDuration(int *prevDuration, struct filme *movie) {
     char duracao[5];
     int duracaoValid = 0;
     
-    if (prevDuration == 0) {
+    if (prevDuration == NULL) {
         
         do{
             printf(BOLDBLACK "Duração em minutos:\n" RESET);

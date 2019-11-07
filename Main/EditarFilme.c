@@ -60,7 +60,7 @@ void EditarFilme() {
                     printf("-> ");
                     scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
-
+                    
                     EditMovie(id);
                     MovieList();
                     

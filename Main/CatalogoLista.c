@@ -21,7 +21,7 @@ void CatalogoLista(void) {
     printf(BOLDBLACK "***** Catálogo - CFLIX *****\n" RESET);
     
     MovieList();
-        
+    
     if(filmes == NULL || filmes->count == 0) {
         do {
             printf( BOLDBLACK"\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
@@ -69,5 +69,3 @@ void CatalogoLista(void) {
         } while(option != '1');
     }
 }
-
-

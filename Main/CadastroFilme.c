@@ -17,25 +17,25 @@
 void CadastrarFilme(void) {
     ClearScreen();
     
-    // Variables
+    /*  Variables */
     struct filme novoFilme = {0};
     char option = 0;
     
     printf(BOLDBLACK "***** Cadastro de flmes - CFLIX *****\n" RESET);
     
-    // Movie Name Function
+    /* Movie Name Function */
     ReadMovieName(NULL, &novoFilme);
     
-    // Movie date Function
+    /* Movie date Function */
     ReadMovieDate(NULL, &novoFilme);
     
-    // Movie duration Function
+    /* Movie duration Function */
     ReadMovieDuration(NULL, &novoFilme);
     
-    // Movie confirmation Function
+    /* Movie confirmation Function */
     MovieConfirmation(novoFilme);
     
-    //Menu
+    /* Menu */
     do{
         printf(BOLDBLACK "\n1 - Retornar:\n2 - Adicionar:\n" RESET);
         printf("-> ");
