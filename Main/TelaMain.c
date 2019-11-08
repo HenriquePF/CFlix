@@ -7,6 +7,7 @@
 #include "ExcluirFilme.h"
 #include "ClearScreen.h"
 #include "Filme.h"
+#include "ReadMovie.h"
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
 #define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */

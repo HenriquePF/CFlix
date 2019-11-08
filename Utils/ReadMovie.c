@@ -10,18 +10,28 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
+/* Movie Edit Function */
 void EditMovie(int index) {
     
+    /* TODO - Prevent the user to edit unexistent elements(id < 0 && id > last.elem.id) */
+    
     /* Variables */
+    int i = 0;
     struct Array *filmeEdit = GetFilmes();
     struct filme *f = {0};
     f = &(filmeEdit->p[index - 1]);
+
+        if (&(filmeEdit->p[index - 1]) <= 0 || &(filmeEdit->p[index - 1]) > &(filmeEdit->p[i])) {
+                printf("ID inválido. Tente novamente.\n");
+            EditarFilme();
+        }
     
     ReadMovieName(f->nomeFilme, f);
     ReadMovieDate(&f->dataLancamento, f);
     ReadMovieDuration(&f->duracaoFilme, f);
 }
 
+/* Add/Edit Movie Name */
 void ReadMovieName(char *prevName, struct filme *movie) {
     
     char movieName[199], *newString;
@@ -49,16 +59,17 @@ void ReadMovieName(char *prevName, struct filme *movie) {
             fgets(movieName, sizeof(movieName), stdin);
             
             if (strcmp(movieName, "\n") != 0) {
-                
+
                 newString = StringTrimmer(movieName);
                 TrimTrailing(newString);
-                
                 strcpy(movie->nomeFilme, newString);
+                
             }
         } while((strcmp(movieName, "\n") != 0) && (strcmp(movieName, "\n") == 0));
     }
 }
 
+/* Add/Edit Movie Date */
 void ReadMovieDate(long *prevDate, struct filme *movie) {
     char dataInicial[11], dataComp[11];
     struct tm dataStrct = {0};
@@ -125,6 +136,7 @@ void ReadMovieDate(long *prevDate, struct filme *movie) {
     }
 }
 
+/* Add/Edit Movie Duration */
 void ReadMovieDuration(int *prevDuration, struct filme *movie) {
     int validDigit = 0;
     char duracao[5];
@@ -149,8 +161,7 @@ void ReadMovieDuration(int *prevDuration, struct filme *movie) {
         }while(validDigit != 1);
         
     } else {
-        
-        /* Duration Edition Segment */
+    
         do {
             printf(BOLDBLACK "\nDuração[%d]: " RESET, movie->duracaoFilme);
             fgets(duracao, sizeof(duracao), stdin);
@@ -167,8 +178,7 @@ void ReadMovieDuration(int *prevDuration, struct filme *movie) {
     }
 }
 
-
-/* Movie Confirmation */
+/* Add/Edit Movie Confirmation */
 void MovieConfirmation(struct filme novoFilme) {
     time_t r;
     struct tm dataStrct = {0};

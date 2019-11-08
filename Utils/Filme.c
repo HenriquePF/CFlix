@@ -3,6 +3,8 @@
 #include <string.h>
 #include "Filme.h"
 
+
+/* TODO - Prevent user to delete unexistent elements(id < 0 && id > last.elem.id )*/
 void RemoveMovieTESTE(struct Array *a, int index) {
     int i, j = 0;
     
