@@ -3,26 +3,6 @@
 #include <string.h>
 #include "Filme.h"
 
-
-/* TODO - Prevent user to delete unexistent elements(id < 0 && id > last.elem.id )*/
-void RemoveMovieTESTE(struct Array *a, int index) {
-    int i, j = 0;
-    
-    struct filme *temp = malloc(sizeof(a->p));
-    
-    for (i = 1; i <= a->count; i++) {
-        if (i != index) {
-            temp[j] = a->p[i];
-            j++;
-        }
-    }
-    
-    a->count = a->count - 1;
-    a->reserved = a->count;
-    free(a->p);
-    a->p = temp;
-}
-
 void RemoveMovie(struct Array *a, int index) {
     int i, j = 0;
     

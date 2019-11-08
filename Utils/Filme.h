@@ -23,6 +23,12 @@ struct filme {
     int duracaoFilme;
 };
 
+struct cadastro {
+    char nomeCadastro[NOME];
+    time_t dataCadastro;
+    int numeroCadastro;
+};
+
 void AddFilme(struct filme f);
 void DeleteFilme(struct Array *f ,int index);
 

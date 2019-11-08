@@ -10,21 +10,36 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
+//         struct cadastro .nomeCadastro           novoNome
+void readText(char *previousText, char **resultText) {
+  
+
+    
+}
+
+//     struct cadastro .dataCadastro           novoDate
+void data(char *previousDate, char **resultDate) {
+    
+    
+    
+}
+
+//     struct cadastro .numberoCadastro           novoNumero
+void readNumber(char *previousNumber, char **resultNumber) {
+    
+    
+    
+}
+
 /* Movie Edit Function */
 void EditMovie(int index) {
     
     /* TODO - Prevent the user to edit unexistent elements(id < 0 && id > last.elem.id) */
     
     /* Variables */
-    int i = 0;
     struct Array *filmeEdit = GetFilmes();
     struct filme *f = {0};
     f = &(filmeEdit->p[index - 1]);
-
-        if (&(filmeEdit->p[index - 1]) <= 0 || &(filmeEdit->p[index - 1]) > &(filmeEdit->p[i])) {
-                printf("ID inválido. Tente novamente.\n");
-            EditarFilme();
-        }
     
     ReadMovieName(f->nomeFilme, f);
     ReadMovieDate(&f->dataLancamento, f);
