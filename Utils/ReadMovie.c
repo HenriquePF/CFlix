@@ -25,9 +25,9 @@ void EditMovie(int index) {
     f = (filmeEdit->p[index - 1]);
     
     char *nomeEditado = filmeEdit->p->nomeFilme;
-    time_t *dataEditada = &filmeEdit->p->dataLancamento;
+    char *dataEditada = &filmeEdit->p->dataLancamento;
     int *numEditado = &filmeEdit->p->duracaoFilme;
-    
+        
     ReadText(f.nomeFilme, &nomeEditado);
 //    ReadMovieName(f.nomeFilme, &f);
     ReadDate(&f.dataLancamento, &dataEditada);
@@ -76,7 +76,7 @@ void ReadText(char *previousText, char **resultText) {
 }
 
 // NOT OK!
-void ReadDate(time_t *previousDate, time_t **resultDate) {
+void ReadDate(char *previousDate, char **resultDate) {
     char dataInicial[11], dataComp[11];
     struct tm dataStrct = {0};
     int comp = 0;
@@ -102,7 +102,7 @@ void ReadDate(time_t *previousDate, time_t **resultDate) {
                 printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
             }
             
-            *resultDate = &r;
+            *resultDate = dataInicial;
         } while ((comp = strcmp(dataInicial, dataComp)) != 0);
         
     } else {
@@ -134,7 +134,8 @@ void ReadDate(time_t *previousDate, time_t **resultDate) {
                 }
                 
                 
-                *resultDate = &r;
+                *resultDate = dataInicial;
+                printf("%s", *resultDate);
                 fseek(stdin, 0, SEEK_END);
             } else {
                 break;
@@ -183,7 +184,6 @@ void ReadNumber(int *previousNumber, int **resultNumber) {
             } else {
                 break;
             }
-            
         } while (duracao[0] == '\n');
     }
 }

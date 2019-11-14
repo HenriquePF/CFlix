@@ -8,7 +8,7 @@
 
 void ReadText(char *previousText, char **resultText);
 
-void ReadDate(time_t *previousDate, time_t **resultDate);
+void ReadDate(char *previousDate, char **resultDate);
 
 void ReadNumber(int *previousNumber, int **resultNumber);
 
