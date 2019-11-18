@@ -34,11 +34,11 @@ void CadastrarFilme(void) {
     
     /* Movie date Function */
 //    ReadMovieDate(NULL, &novoFilme);
-    ReadDate(NULL, &data);
+    ReadDate(NULL, data);
     
     /* Movie duration Function */
 //    ReadMovieDuration(NULL, &novoFilme);
-    ReadNumber(NULL, &num);    
+    ReadNumber(NULL, num);    
     
     /* Movie confirmation Function */
     MovieConfirmation(novoFilme);

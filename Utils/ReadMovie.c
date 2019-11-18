@@ -25,16 +25,15 @@ void EditMovie(int index) {
     f = (filmeEdit->p[index - 1]);
     
     char *nomeEditado = filmeEdit->p->nomeFilme;
-    char *dataEditada = &filmeEdit->p->dataLancamento;
+    time_t *dataEditada = &filmeEdit->p->dataLancamento;
     int *numEditado = &filmeEdit->p->duracaoFilme;
-        
-    ReadText(f.nomeFilme, &nomeEditado);
-//    ReadMovieName(f.nomeFilme, &f);
-    ReadDate(&f.dataLancamento, &dataEditada);
-//    ReadMovieDate(&f.dataLancamento, &f);
-    ReadNumber(&f.duracaoFilme, &numEditado);
-//    ReadMovieDuration(&f.duracaoFilme, &f);
     
+    ReadText(f.nomeFilme, &nomeEditado);
+    //    ReadMovieName(f.nomeFilme, &f);
+    ReadDate(&f.dataLancamento, dataEditada);
+    //    ReadMovieDate(&f.dataLancamento, &f);
+    ReadNumber(&f.duracaoFilme, numEditado);
+    //    ReadMovieDuration(&f.duracaoFilme, &f);
 }
 
 //SAVING AND EDITING IS OK!
@@ -76,7 +75,7 @@ void ReadText(char *previousText, char **resultText) {
 }
 
 // NOT OK!
-void ReadDate(char *previousDate, char **resultDate) {
+void ReadDate(time_t *previousDate, time_t *resultDate) {
     char dataInicial[11], dataComp[11];
     struct tm dataStrct = {0};
     int comp = 0;
@@ -101,8 +100,8 @@ void ReadDate(char *previousDate, char **resultDate) {
             if ((comp = strcmp(dataInicial, dataComp)) != 0) {
                 printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
             }
-            
-            *resultDate = dataInicial;
+    
+            *resultDate = r;
         } while ((comp = strcmp(dataInicial, dataComp)) != 0);
         
     } else {
@@ -133,9 +132,7 @@ void ReadDate(char *previousDate, char **resultDate) {
                     printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
                 }
                 
-                
-                *resultDate = dataInicial;
-                printf("%s", *resultDate);
+                *resultDate = r;
                 fseek(stdin, 0, SEEK_END);
             } else {
                 break;
@@ -145,12 +142,11 @@ void ReadDate(char *previousDate, char **resultDate) {
     }
 }
 
-
 //NOT OK!
-void ReadNumber(int *previousNumber, int **resultNumber) {
+void ReadNumber(int *previousNumber, int *resultNumber) {
     int validDigit = 0;
     char duracao[5];
-    int duracaoValid = 0;
+    int duracaoValid = 5;
     
     if (previousNumber == NULL) {
         
@@ -164,9 +160,10 @@ void ReadNumber(int *previousNumber, int **resultNumber) {
                 while((temp=getchar()) != EOF && temp != '\n');
                 printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                 validDigit = scanf("%d", &duracaoValid);
+                fseek(stdin, 0, SEEK_END);
             }
             
-            *resultNumber = &duracaoValid;
+            *resultNumber = duracaoValid;
             ClearScreen();
         } while (validDigit != 1);
         
@@ -180,7 +177,7 @@ void ReadNumber(int *previousNumber, int **resultNumber) {
                 duracao[strlen(duracao) - 1] = 0;
                 int j = atoi(duracao);
                 
-                *resultNumber = &j;
+                *resultNumber = j;
             } else {
                 break;
             }
