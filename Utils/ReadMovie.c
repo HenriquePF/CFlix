@@ -20,30 +20,26 @@ void EditMovie(int index) {
     
     /* Variables */
     struct Array *filmeEdit = GetFilmes();
+    struct filme *f = {0};
+    f = &((filmeEdit->p[index - 1]));
+
+    char *nomeEditado = f->nomeFilme;
+    time_t *dataEditada = &f->dataLancamento;
+    int *numEditado = &f->duracaoFilme;
     
-    struct filme f = {0};
-    f = (filmeEdit->p[index - 1]);
-    
-    char *nomeEditado = filmeEdit->p->nomeFilme;
-    time_t *dataEditada = &filmeEdit->p->dataLancamento;
-    int *numEditado = &filmeEdit->p->duracaoFilme;
-    
-    ReadText(f.nomeFilme, &nomeEditado);
-    //    ReadMovieName(f.nomeFilme, &f);
-    ReadDate(&f.dataLancamento, dataEditada);
-    //    ReadMovieDate(&f.dataLancamento, &f);
-    ReadNumber(&f.duracaoFilme, numEditado);
-    //    ReadMovieDuration(&f.duracaoFilme, &f);
+    ReadText(f->nomeFilme, nomeEditado);
+    ReadDate(&f->dataLancamento, dataEditada);
+    ReadNumber(&f->duracaoFilme, numEditado);
 }
 
 //SAVING AND EDITING IS OK!
-void ReadText(char *previousText, char **resultText) {
+void ReadText(char *previousText, char *resultText) {
     char movieName[199], *newString;
     
     if (previousText == NULL) {
         
         do {
-            printf(BOLDBLACK "\nReadText:\n" RESET);
+            printf(BOLDBLACK "\nRead Text:\n" RESET);
             printf("-> ");
             fgets(movieName, sizeof(movieName), stdin);
             
@@ -54,13 +50,13 @@ void ReadText(char *previousText, char **resultText) {
                 printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
             }
             
-            strcpy(*resultText, newString);
+            strcpy(resultText, newString);
         } while (movieName[0] == '\n' || movieName[0] == ' ');
         
     } else {
         
         do {
-            printf(BOLDBLACK "\nReadText EDIT [%s]: " RESET, previousText);
+            printf(BOLDBLACK "\nRead Text[%s]: " RESET, previousText);
             fgets(movieName, sizeof(movieName), stdin);
             
             if (strcmp(movieName, "\n") != 0) {
@@ -68,7 +64,7 @@ void ReadText(char *previousText, char **resultText) {
                 newString = StringTrimmer(movieName);
                 TrimTrailing(newString);
                 
-                strcpy(*resultText, newString);
+                strcpy(resultText, newString);
             }
         } while ((strcmp(movieName, "\n") != 0) && (strcmp(movieName, "\n") == 0));
     }
@@ -83,7 +79,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
     
     if (previousDate == NULL) {
         do {
-            printf(BOLDBLACK "READ DATA\n" RESET);
+            printf(BOLDBLACK "Read Data\n" RESET);
             printf("-> ");
             fgets(dataInicial, 11, stdin);
             
@@ -118,7 +114,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
         strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(&data));
         
         do{
-            printf(BOLDBLACK "\nREAD DATA EDIT[%s]: " RESET, dataFinal);
+            printf(BOLDBLACK "\nRead Data[%s]: " RESET, dataFinal);
             fgets(dataInicial, 11, stdin);
             
             if (strcmp(dataInicial, "\n") != 0) {
@@ -151,7 +147,7 @@ void ReadNumber(int *previousNumber, int *resultNumber) {
     if (previousNumber == NULL) {
         
         do{
-            printf(BOLDBLACK "READ NUMBER:\n" RESET);
+            printf(BOLDBLACK "Read Number:\n" RESET);
             printf("-> ");
             validDigit = scanf("%d", &duracaoValid);
             fseek(stdin, 0, SEEK_END);
@@ -170,7 +166,7 @@ void ReadNumber(int *previousNumber, int *resultNumber) {
     } else {
         
         do {
-            printf(BOLDBLACK "\nREAD NUMBER EDIT[%d]: " RESET, *previousNumber);
+            printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
             fgets(duracao, sizeof(duracao), stdin);
             
             if (duracao[0] != '\n') {

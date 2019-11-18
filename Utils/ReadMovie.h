@@ -6,7 +6,7 @@
 
 /* -------------------------------------------------------------- */
 
-void ReadText(char *previousText, char **resultText);
+void ReadText(char *previousText, char *resultText);
 
 void ReadDate(time_t *previousDate, time_t *resultDate);
 

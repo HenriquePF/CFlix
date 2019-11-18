@@ -30,7 +30,7 @@ void CadastrarFilme(void) {
     
     /* Movie Name Function */
 //    ReadMovieName(NULL, &novoFilme);
-    ReadText(NULL, &nome);
+    ReadText(NULL, nome);
     
     /* Movie date Function */
 //    ReadMovieDate(NULL, &novoFilme);
