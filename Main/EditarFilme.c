@@ -61,6 +61,8 @@ void EditarFilme() {
                     scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
                     
+                    /* TODO - Prevent the user to edit unexistent elements(id < 0 && id > last.elem.id) */
+                    
                     EditMovie(id);
                     MovieList();
                     

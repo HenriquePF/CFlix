@@ -29,16 +29,16 @@ void CadastrarFilme(void) {
     printf(BOLDBLACK "***** Cadastro de flmes - CFLIX *****\n" RESET);
     
     /* Movie Name Function */
-//    ReadMovieName(NULL, &novoFilme);
+    //    ReadMovieName(NULL, &novoFilme);
     ReadText(NULL, nome);
     
     /* Movie date Function */
-//    ReadMovieDate(NULL, &novoFilme);
+    //    ReadMovieDate(NULL, &novoFilme);
     ReadDate(NULL, data);
     
     /* Movie duration Function */
-//    ReadMovieDuration(NULL, &novoFilme);
-    ReadNumber(NULL, num);    
+    //    ReadMovieDuration(NULL, &novoFilme);
+    ReadNumber(NULL, num);
     
     /* Movie confirmation Function */
     MovieConfirmation(novoFilme);

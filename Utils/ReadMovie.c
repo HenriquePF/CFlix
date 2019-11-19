@@ -16,13 +16,11 @@
 /* Movie Edit Function */
 void EditMovie(int index) {
     
-    /* TODO - Prevent the user to edit unexistent elements(id < 0 && id > last.elem.id) */
-    
     /* Variables */
     struct Array *filmeEdit = GetFilmes();
     struct filme *f = {0};
     f = &((filmeEdit->p[index - 1]));
-
+    
     char *nomeEditado = f->nomeFilme;
     time_t *dataEditada = &f->dataLancamento;
     int *numEditado = &f->duracaoFilme;
@@ -32,7 +30,7 @@ void EditMovie(int index) {
     ReadNumber(&f->duracaoFilme, numEditado);
 }
 
-//SAVING AND EDITING IS OK!
+// ReadText and edit = ok;
 void ReadText(char *previousText, char *resultText) {
     char movieName[199], *newString;
     
@@ -70,7 +68,7 @@ void ReadText(char *previousText, char *resultText) {
     }
 }
 
-// NOT OK!
+// ReadDate and edit = ok;
 void ReadDate(time_t *previousDate, time_t *resultDate) {
     char dataInicial[11], dataComp[11];
     struct tm dataStrct = {0};
@@ -96,7 +94,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
             if ((comp = strcmp(dataInicial, dataComp)) != 0) {
                 printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
             }
-    
+            
             *resultDate = r;
         } while ((comp = strcmp(dataInicial, dataComp)) != 0);
         
@@ -138,7 +136,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
     }
 }
 
-//NOT OK!
+//ReadNumber and edit = ok;
 void ReadNumber(int *previousNumber, int *resultNumber) {
     int validDigit = 0;
     char duracao[5];
