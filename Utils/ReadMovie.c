@@ -58,7 +58,7 @@ void ReadText(char *previousText, char *resultText) {
     } while (previousText == NULL && strcmp(movieName, "\n") == 0);
 }
 
-// QUASE, FILADASSSSPUTAAAAAAAAAARRRRRRHGHHHHH!
+// almost there...
 void ReadDate(time_t *previousDate, time_t *resultDate) {
     char dataFinal[11] = {0}, dataInicial[11] = {0}, dataComp[11] = {0};
     
@@ -73,21 +73,14 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
             strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(&data));
             
             printf(BOLDBLACK "\nRead Data[%s]: " RESET, dataFinal);
-            fgets(dataInicial, 11, stdin);
             
         } else {
-            
             printf(BOLDBLACK "Read Data\n" RESET);
             printf("-> ");
             
-            do {
-                fgets(dataInicial, 11, stdin);
-                
-                if (strcmp(dataInicial, "\n") != 0) {
-                    printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
-                }
-            } while (strcmp(dataInicial, "\n") != 0);
         }
+        
+        fgets(dataInicial, 11, stdin);
         
         strcpy(dataComp, dataInicial);
         
@@ -95,15 +88,15 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
         r = mktime(&dataStrct);
         strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
         
-        if ((strcmp(dataInicial, dataComp)) != 0) {
+        if ((strcmp(dataInicial, dataComp)) != 0 || strcmp(dataInicial, "\n") == 0) {
             printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
         }
         
         *resultDate = r;
-    } while (strcmp(dataInicial, dataComp) != 0);
+    } while (strcmp(dataInicial, dataComp) != 0 || strcmp(dataInicial, "\n") == 0);
 }
 
-// ReadDate and edit = ok;
+// Kinda ok....
 void ReadDate2(time_t *previousDate, time_t *resultDate) {
     char dataInicial[11] = {0}, dataComp[11] = {0};
     struct tm dataStrct = {0};
@@ -171,8 +164,24 @@ void ReadDate2(time_t *previousDate, time_t *resultDate) {
     }
 }
 
+// TBC...
 void ReadNumber2(int *previousNumber, int *resultNumbers) {
     
+    do {
+        
+        if (previousNumber) {
+            printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
+            
+        } else {
+            printf(BOLDBLACK "Read Number:\n" RESET);
+            printf("-> ");
+            
+        }
+        
+        
+        
+        
+    } while (1);
     
 }
 
