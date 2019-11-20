@@ -27,11 +27,3 @@ void MovieConfirmation(struct filme movieCheck);
 void MovieList(void);
 
 #endif
-
-
-/*
- 
- 1 - data e duração não salvam;
- 2 - Escolher elemento por ID;
- 
- */

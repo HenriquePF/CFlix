@@ -19,6 +19,7 @@ void EditarFilme() {
     
     struct Array *filmeEdit;
     filmeEdit = GetFilmes();
+    
     int id = 0;
     char option = 0;
     
