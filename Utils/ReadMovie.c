@@ -12,6 +12,16 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
+/* To Fix: */
+
+// When inputing date and the input is \n, it accepts and date goes to 31/12/1969.
+// WWhen editing the date and the input is wrong, dates change.
+// When inputing duration and the input is \n, it accepts and date goes to 0.
+// When editing duration and the input is more than 3 numbers, only the first 3 stays.
+// When editing duration and the input is <= than 3 letters, duration goes to 0.
+// When editing duration and the input is > than 3 letters, error and repeat.
+
+
 /* Movie Edit Function */
 void EditMovie(int index) {
     
@@ -103,12 +113,50 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
 }
 
 // TBC...
-void ReadNumber2(int *previousNumber, int *resultNumbers) {
+void ReadNumber(int *previousNumber, int *resultNumbers) {
 
+    char duracao[5] = {0};
+    int i = 0, isLetter = 0;
+    
+    do {
+        
+        if (previousNumber) {
+            printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
+        } else {
+            printf(BOLDBLACK "Read Number:\n" RESET);
+            printf("-> ");
+        }
+        
+        fgets(duracao, sizeof(duracao), stdin);
+        fseek(stdin, 0, SEEK_END);
+        
+        if (strcmp(duracao, "\n") == 0) {
+            break;
+        }
+        
+        for (i = 0; duracao[i] != '\0'; i++) {
+            if (isalpha(duracao[i]) != 0) {
+                isLetter = 1;
+            } else {
+                isLetter = 0;
+            }
+        }
+        
+        if (isLetter == 1) {
+            printf(BOLDRED "Número inválido. Tente novamente.\n" RESET);
+        }
+        
+        if (duracao[0] != '\n') {
+            duracao[strlen(duracao) - 1] = 0;
+            int j = atoi(duracao);
+            
+            *resultNumbers = j;
+        }
+    } while (isLetter == 1);
 }
 
 //ReadNumber and edit;
-void ReadNumber(int *previousNumber, int *resultNumber) {
+void ReadNumber2(int *previousNumber, int *resultNumber) {
     int validDigit = 0;
     char duracao[5] = {0};
     int duracaoValid = 5;
