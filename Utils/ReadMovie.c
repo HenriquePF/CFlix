@@ -5,6 +5,7 @@
 #include "ClearScreen.h"
 #include "TrimFunc.h"
 #include "TrimFunc.h"
+#include "ctype.h"
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
 #define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
@@ -45,7 +46,7 @@ void ReadText(char *previousText, char *resultText) {
         newString = StringTrimmer(movieName);
         TrimTrailing(newString);
         
-        if (!previousText && strcmp(movieName, "\n")) {
+        if (!previousText && !strcmp(movieName, "\n")) {
             printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
         }
         
@@ -58,7 +59,7 @@ void ReadText(char *previousText, char *resultText) {
     } while (previousText == NULL && strcmp(movieName, "\n") == 0);
 }
 
-// almost there...
+// ReadDate and edit = ok;
 void ReadDate(time_t *previousDate, time_t *resultDate) {
     char dataFinal[11] = {0}, dataInicial[11] = {0}, dataComp[11] = {0};
     
@@ -81,6 +82,11 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
         }
         
         fgets(dataInicial, 11, stdin);
+        fseek(stdin, 0, SEEK_END);
+        
+        if (strcmp(dataInicial, "\n") == 0) {
+            break;
+        }
         
         strcpy(dataComp, dataInicial);
         
@@ -88,104 +94,20 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
         r = mktime(&dataStrct);
         strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
         
-        if ((strcmp(dataInicial, dataComp)) != 0 || strcmp(dataInicial, "\n") == 0) {
+        if ((strcmp(dataInicial, dataComp)) != 0) {
             printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
         }
-        
-        *resultDate = r;
-    } while (strcmp(dataInicial, dataComp) != 0 || strcmp(dataInicial, "\n") == 0);
-}
 
-// Kinda ok....
-void ReadDate2(time_t *previousDate, time_t *resultDate) {
-    char dataInicial[11] = {0}, dataComp[11] = {0};
-    struct tm dataStrct = {0};
-    int comp = 0;
-    time_t r;
-    
-    if (previousDate == NULL) {
-        do {
-            printf(BOLDBLACK "Read Data\n" RESET);
-            printf("-> ");
-            fgets(dataInicial, 11, stdin);
-            
-            if (!(strchr(dataInicial, '\n'))) {
-                while (fgetc(stdin) != '\n');
-            }
-            
-            strcpy(dataComp, dataInicial);
-            
-            strptime(dataInicial, "%d/%m/%Y", &dataStrct);
-            r = mktime(&dataStrct);
-            strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
-            
-            if ((comp = strcmp(dataInicial, dataComp)) != 0) {
-                printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
-            }
-            
-            *resultDate = r;
-        } while ((comp = strcmp(dataInicial, dataComp)) != 0);
-        
-    } else {
-        
-        struct tm dataStrct = {0};
-        time_t r, data = 0;
-        struct tm ts = {0};
-        
-        int comp = 0;
-        char dataFinal[11] = {0}, dataInicial[11] = {0}, dataComp[11] = {0};
-        
-        data = *previousDate;
-        ts = *localtime(&data);
-        strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(&data));
-        
-        do{
-            printf(BOLDBLACK "\nRead Data[%s]: " RESET, dataFinal);
-            fgets(dataInicial, 11, stdin);
-            
-            if (strcmp(dataInicial, "\n") != 0) { // if not \n then substitute
-                strcpy(dataComp, dataInicial);
-                
-                strptime(dataInicial, "%d/%m/%Y", &dataStrct);
-                r = mktime(&dataStrct);
-                strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
-                
-                if ((comp = strcmp(dataInicial, dataComp)) != 0) {
-                    printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
-                }
-                
-                *resultDate = r;
-                fseek(stdin, 0, SEEK_END);
-            } else {
-                break;
-            }
-            
-        } while ((comp = strcmp(dataInicial, dataComp)) != 0);
-    }
+        *resultDate = r;
+    } while (strcmp(dataInicial, dataComp) != 0);
 }
 
 // TBC...
 void ReadNumber2(int *previousNumber, int *resultNumbers) {
-    
-    do {
-        
-        if (previousNumber) {
-            printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
-            
-        } else {
-            printf(BOLDBLACK "Read Number:\n" RESET);
-            printf("-> ");
-            
-        }
-        
-        
-        
-        
-    } while (1);
-    
+
 }
 
-//ReadNumber and edit = ok;
+//ReadNumber and edit;
 void ReadNumber(int *previousNumber, int *resultNumber) {
     int validDigit = 0;
     char duracao[5] = {0};
