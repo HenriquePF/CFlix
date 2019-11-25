@@ -61,7 +61,6 @@ void ReadText(char *previousText, char *resultText) {
 
 // ReadDate and edit = ok;
 void ReadDate(time_t *previousDate, time_t *resultDate) {
-    
     char dataFinal[11] = {0}, dataInicial[11] = {0}, dataComp[11] = {0};
     
     do {
@@ -72,118 +71,58 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
         if (previousDate) {
             ts = *localtime(previousDate);
             strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(previousDate));
-            printf(BOLDBLACK "\nRead Data[%s]: " RESET, dataFinal);
+            printf(BOLDBLACK "\nRead Date[%s]: " RESET, dataFinal);
         } else {
-            printf(BOLDBLACK "Read Data\n" RESET);
+            printf(BOLDBLACK "Read Date\n" RESET);
             printf("-> ");
         }
         
         fgets(dataInicial, 11, stdin);
         fseek(stdin, 0, SEEK_END);
         
-        strcpy(dataComp, dataInicial);
-        
-        strptime(dataInicial, "%d/%m/%Y", &dataStrct);
-        r = mktime(&dataStrct);
-        strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
-        
-        if (previousDate && strcmp(dataInicial, "\n")) {
+        if (strcmp(dataInicial, "\n") != 0) {
+            strcpy(dataComp, dataInicial);
             
-        }
-        
-        if ((strcmp(dataInicial, dataComp)) != 0 && strcmp(dataInicial, "\n")) {
+            strptime(dataInicial, "%d/%m/%Y", &dataStrct);
+            r = mktime(&dataStrct);
+            strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct); // used only for comparison
+            
+            if (strcmp(dataInicial, dataComp) == 0) {
+                *resultDate = r;
+            } else {
+                printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
+            }
+        } else {
             printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
         }
         
-        *resultDate = r;
         
-    } while (strcmp(dataInicial, dataComp) != 0 && strcmp(dataInicial, "\n"));
+    } while (strcmp(dataInicial, "\n") != 0 && (strcmp(dataInicial, dataComp) != 0));
 }
 
-// TBC...
+// ReadNumber and edit = ok;
 void ReadNumber(int *previousNumber, int *resultNumbers) {
-    
+    int validDigit = 0;
     char duracao[5] = {0};
-    int i = 0, isLetter = 0;
     
     do {
-        
         if (previousNumber) {
             printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
         } else {
             printf(BOLDBLACK "Read Number:\n" RESET);
-            printf("-> ");
         }
         
         fgets(duracao, sizeof(duracao), stdin);
-        fseek(stdin, 0, SEEK_END);
         
-        if (strcmp(duracao, "\n") == 0) {
+        if ((validDigit = atoi(duracao))) {
+            *resultNumbers = validDigit;
             break;
+        } else {
+            printf(BOLDRED "Número inválido. Tente novamente." RESET);
         }
         
-        for (i = 0; duracao[i] != '\0'; i++) {
-            if (isalpha(duracao[i]) != 0) {
-                isLetter = 1;
-            } else {
-                isLetter = 0;
-            }
-        }
-        
-        if (isLetter == 1) {
-            printf(BOLDRED "Número inválido. Tente novamente.\n" RESET);
-        }
-        
-        if (duracao[0] != '\n') {
-            duracao[strlen(duracao) - 1] = 0;
-            int j = atoi(duracao);
-            
-            *resultNumbers = j;
-        }
-    } while (isLetter == 1);
-}
-
-//ReadNumber and edit;
-void ReadNumber2(int *previousNumber, int *resultNumber) {
-    int validDigit = 0;
-    char duracao[5] = {0};
-    int duracaoValid = 5;
+    } while (1);
     
-    if (previousNumber == NULL) {
-        
-        do{
-            printf(BOLDBLACK "Read Number:\n" RESET);
-            printf("-> ");
-            validDigit = scanf("%d", &duracaoValid);
-            fseek(stdin, 0, SEEK_END);
-            int temp = 0;
-            while(validDigit != 1){
-                while((temp=getchar()) != EOF && temp != '\n');
-                printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
-                validDigit = scanf("%d", &duracaoValid);
-                fseek(stdin, 0, SEEK_END);
-            }
-            
-            *resultNumber = duracaoValid;
-            ClearScreen();
-        } while (validDigit != 1);
-        
-    } else {
-        
-        do {
-            printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
-            fgets(duracao, sizeof(duracao), stdin);
-            
-            if (duracao[0] != '\n') {
-                duracao[strlen(duracao) - 1] = 0;
-                int j = atoi(duracao);
-                
-                *resultNumber = j;
-            } else {
-                break;
-            }
-        } while (duracao[0] == '\n');
-    }
 }
 
 /* Add/Edit Movie Name */
