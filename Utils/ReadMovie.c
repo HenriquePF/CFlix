@@ -113,15 +113,16 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
         }
         
         fgets(duracao, sizeof(duracao), stdin);
-        
-        if ((validDigit = atoi(duracao))) {
-            *resultNumbers = validDigit;
-            break;
-        } else {
+        validDigit = atoi(duracao);
+        if (!validDigit) {
             printf(BOLDRED "Número inválido. Tente novamente." RESET);
+        } else {
+            *resultNumbers = validDigit;
         }
         
-    } while (1);
+        // USE A FOR LOOP TO CHECK INPUT!
+        
+    } while (validDigit);
     
 }
 
