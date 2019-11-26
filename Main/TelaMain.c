@@ -15,51 +15,51 @@
 #define RESET       "\033[0m"              /* RESET */
 
 int main(void) {
-
-char option = 0;
-
-do{
-    ClearScreen();
-    printf(BOLDBLACK "***** CFLIX *****\n\n" RESET);
-
-    printf(BOLDBLACK "1) Listar catálogo.\n" RESET);
-    printf(BOLDBLACK "2) Cadastrar filme.\n" RESET);
-    printf(BOLDBLACK "3) Editar filme.\n" RESET);
-    printf(BOLDBLACK "4) Excluir filme.\n" RESET);
-    printf(BOLDBLACK "5) Sair.\n\n" RESET);
-
-    printf(BOLDBLACK "Entre com a opção desejada:\n" RESET);
-    printf("-> ");
-    scanf("%c", &option);
-    fseek(stdin, 0, SEEK_END);
-
-    switch (option) {
-        case '1':
-            CatalogoLista();
-            break;
-            
-        case '2':
-            CadastrarFilme();
-            break;
-            
-        case '3':
-            EditarFilme();
-            break;
-            
-        case '4':
-            ExcluirFilme();
-            break;
-            
-        case '5':
-            printf(BOLDRED "\n\nSaindo..." RESET);
-            break;
-            
-        default:
-            break;
-    }
-    fseek(stdin, 0, SEEK_END);
     
-    }while(option != '5');
-
-return 0;
+    char option = 0;
+    
+    do {
+        ClearScreen();
+        printf(BOLDBLACK "***** CFLIX *****\n\n" RESET);
+        
+        printf(BOLDBLACK "1) Listar catálogo.\n" RESET);
+        printf(BOLDBLACK "2) Cadastrar filme.\n" RESET);
+        printf(BOLDBLACK "3) Editar filme.\n" RESET);
+        printf(BOLDBLACK "4) Excluir filme.\n" RESET);
+        printf(BOLDBLACK "5) Sair.\n\n" RESET);
+        
+        printf(BOLDBLACK "Entre com a opção desejada:\n" RESET);
+        printf("-> ");
+        scanf("%c", &option);
+        fseek(stdin, 0, SEEK_END);
+        
+        switch (option) {
+            case '1':
+                CatalogoLista();
+                break;
+                
+            case '2':
+                CadastrarFilme();
+                break;
+                
+            case '3':
+                EditarFilme();
+                break;
+                
+            case '4':
+                ExcluirFilme();
+                break;
+                
+            case '5':
+                printf(BOLDRED "\n\nSaindo..." RESET);
+                break;
+                
+            default:
+                break;
+        }
+        fseek(stdin, 0, SEEK_END);
+        
+    } while (option != '5');
+    
+    return 0;
 }

@@ -28,8 +28,8 @@ void EditarFilme() {
     MovieList();
     
     if (filmeEdit == NULL || filmeEdit->count == 0) {
-        do{
-            
+        
+        do {
             printf(BOLDBLACK "\n1 - Retornar:\n" RESET);
             printf("-> ");
             scanf("%c", &option);
@@ -44,7 +44,7 @@ void EditarFilme() {
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }
-        }while (option != '1');
+        } while (option != '1');
         
     } else {
         
@@ -76,6 +76,6 @@ void EditarFilme() {
                     printf(BOLDRED "Entrada inválida. Tente novamente." RESET);
                     break;
             }
-        }while(option != '2');
+        } while (option != '2');
     }
 }

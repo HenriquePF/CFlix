@@ -23,7 +23,9 @@ void ExcluirFilme() {
     MovieList();
     
     if(filmes == NULL || filmes->count == 0) {
+        
         do {
+            
             printf( BOLDBLACK"\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
             printf("-> ");
             scanf("%c", &option);
@@ -41,11 +43,12 @@ void ExcluirFilme() {
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }
+            
         } while(option != '1');
         
     } else {
         
-        do{
+        do {
             printf(BOLDBLACK "\nExcluir(1) ou não(2)?\n" RESET);
             printf("-> ");
             scanf("%c", &delOption);
@@ -67,9 +70,10 @@ void ExcluirFilme() {
                     printf(BOLDRED "Opção inválida. Tente novamente.\n" RESET);
                     break;
             }
-        }while(delOption != '1' && delOption != '2');
+            
+        } while (delOption != '1' && delOption != '2');
         
-        do{
+        do {
             printf(BOLDBLACK "\n1 - Menu:\n2 - Catalogo:\n" RESET);
             printf("-> ");
             scanf("%c", &option);
@@ -86,6 +90,6 @@ void ExcluirFilme() {
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }
-        }while(option != '1');
+        } while (option != '1');
     }
 }

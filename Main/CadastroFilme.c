@@ -58,5 +58,5 @@ void CadastrarFilme(void) {
                 printf(BOLDRED "Entrada inválida. Tente novamente." RESET);
                 break;
         }
-    } while(option != '1');
+    } while (option != '1');
 }

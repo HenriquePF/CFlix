@@ -29,9 +29,10 @@ void EditMovie(int index) {
     ReadNumber(&f->duracaoFilme, numEditado);
 }
 
-// ReadText and edit = ok;
+/* ReadText and edit = ok */
 void ReadText(char *previousText, char *resultText) {
     char movieName[199] = {0}, *newString = 0;
+    int isEmpty = 0;
     
     do {
         if (previousText) {
@@ -42,60 +43,59 @@ void ReadText(char *previousText, char *resultText) {
         }
         
         fgets(movieName, sizeof(movieName), stdin);
+        isEmpty = strcmp(movieName, "\n") == 0;
+        
+        if (previousText && isEmpty) {
+            break;
+        }
         
         newString = StringTrimmer(movieName);
         TrimTrailing(newString);
         
-        if (previousText && strcmp(movieName, "\n") == 0) {
-            break;
-        }
-        
-        if (movieName[0] == '\n' || movieName[0] == ' ') {
+        if (!previousText && isEmpty) {
             printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
         }
         
-        if (!previousText && !strcmp(movieName, "\n")) {
-            printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
-        }
-        
-        if (strcmp(movieName, "\n") != 0) {
+        if (!isEmpty) {
             strcpy(resultText, newString);
         }
         
         free(newString);
         newString = NULL;
-    } while (movieName[0] == '\n' || movieName[0] == ' ');
+    } while (isEmpty);
 }
 
-// ReadDate and edit = ok;
+/* ReadDate and edit = ok */
 void ReadDate(time_t *previousDate, time_t *resultDate) {
-    char dataFinal[11] = {0}, dataInicial[11] = {0}, dataComp[11] = {0};
+    char dateRead[11] = {0}, dateTemp[11] = {0};
     
     do {
-        struct tm dataStrct = {0};
+        struct tm dataStruct = {0};
         time_t r = 0;
-        struct tm ts = {0};
         
         if (previousDate) {
-            ts = *localtime(previousDate);
-            strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(previousDate));
-            printf(BOLDBLACK "\nRead Date[%s]: " RESET, dataFinal);
+            strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", localtime(previousDate));
+            printf(BOLDBLACK "\nRead Date[%s]: " RESET, dateRead);
         } else {
             printf(BOLDBLACK "Read Date\n" RESET);
             printf("-> ");
         }
         
-        fgets(dataInicial, 11, stdin);
+        fgets(dateRead, 11, stdin);
         fseek(stdin, 0, SEEK_END);
         
-        if (strcmp(dataInicial, "\n") != 0) {
-            strcpy(dataComp, dataInicial);
+        if (strcmp(dateRead, "\n") == 0 && !previousDate) {
+            printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
+        }
+        
+        if (strcmp(dateRead, "\n") != 0) {
+            strcpy(dateTemp, dateRead);
             
-            strptime(dataInicial, "%d/%m/%Y", &dataStrct);
-            r = mktime(&dataStrct);
-            strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct); // used only for comparison
+            strptime(dateRead, "%d/%m/%Y", &dataStruct);
+            r = mktime(&dataStruct);
+            strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", &dataStruct); // used only for comparison
             
-            if (strcmp(dataInicial, dataComp) == 0) {
+            if (strcmp(dateRead, dateTemp) == 0 && !previousDate) {
                 *resultDate = r;
             } else {
                 printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
@@ -105,14 +105,13 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
             break;
         }
         
-        
-    } while (strcmp(dataInicial, "\n") != 0 && (strcmp(dataInicial, dataComp) != 0));
+    } while (strcmp(dateRead, "\n") != 0 && (strcmp(dateRead, dateTemp) != 0));
 }
 
-// ReadNumber and edit = ok;
+/* ReadNumber and edit = ok */
 void ReadNumber(int *previousNumber, int *resultNumbers) {
     int validDigit = 0;
-    char duracao[5] = {0};
+    char userInput[5] = {0};
     
     do {
         
@@ -120,12 +119,13 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
             printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
         } else {
             printf(BOLDBLACK "Read Number:\n" RESET);
+            printf("-> ");
         }
         
-        fgets(duracao, sizeof(duracao), stdin);
-        validDigit = atoi(duracao);
+        fgets(userInput, sizeof(userInput), stdin);
+        validDigit = atoi(userInput);
         
-        if (previousNumber && strcmp(duracao, "\n") == 0) {
+        if (previousNumber && strcmp(userInput, "\n") == 0) {
             break;
         }
         
@@ -139,26 +139,26 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
 }
 
 /* Movie Confirmation */
-void MovieConfirmation(struct filme novoFilme) {
+void MovieConfirmation(struct filme newMovie) {
     time_t r;
-    struct tm dataStrct = {0};
-    char dataFinal[11] = {0}, dataInicial[11] = {0}, confirm = 0;
+    struct tm dateStruct = {0};
+    char dateFinal[11] = {0}, dateInitial[11] = {0}, confirm = 0;
     
-    strptime(dataInicial, "%d/%m/%Y", &dataStrct);
-    r = mktime(&dataStrct);
+    strptime(dateInitial, "%d/%m/%Y", &dateStruct);
+    r = mktime(&dateStruct);
     
     do {
-        strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(&novoFilme.dataLancamento));
+        strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&newMovie.dataLancamento));
         
         ClearScreen();
         
         printf(BOLDRED "Confirmação de cadastro:\n" RESET);
         printf(BOLDBLACK "\nNome do filme: \n" RESET);
-        printf("%s\n\n", novoFilme.nomeFilme);
+        printf("%s\n\n", newMovie.nomeFilme);
         printf(BOLDBLACK "Data de Lançamento: \n" RESET);
-        printf("%s\n\n", dataFinal);
+        printf("%s\n\n", dateFinal);
         printf(BOLDBLACK "Duração do filme: \n" RESET);
-        printf("%d min\n", novoFilme.duracaoFilme);
+        printf("%d min\n", newMovie.duracaoFilme);
         printf(BOLDRED "\nSalvar(1) ou descartar(2)?\n" RESET);
         printf("-> ");
         scanf("%c", &confirm);
@@ -168,7 +168,7 @@ void MovieConfirmation(struct filme novoFilme) {
             case '1':
                 ClearScreen();
                 printf(BOLDRED "Filme salvo!\n" RESET);
-                AddFilme(novoFilme);
+                AddFilme(newMovie);
                 break;
                 
             case '2':
@@ -189,23 +189,23 @@ void MovieList() {
     struct Array *filmes = GetFilmes();
     
     time_t r;
-    struct tm dataStrct = {0};
-    char dataFinal[11] = {0}, dataInicial[11] = {0};
+    struct tm dateStruct = {0};
+    char dateFinal[11] = {0}, dateInitial[11] = {0};
     
-    r = mktime(&dataStrct);
-    strftime(dataInicial, sizeof(dataInicial), "%d/%m/%Y", &dataStrct);
+    r = mktime(&dateStruct);
+    strftime(dateInitial, sizeof(dateInitial), "%d/%m/%Y", &dateStruct);
     
     if(filmes == NULL || filmes->count == 0) {
         printf(BOLDRED "\nLISTA VAZIA.\n" RESET);
     } else {
         for (int i = 0; i < filmes->count; i++) {
-            strftime(dataFinal, sizeof(dataFinal), "%d/%m/%Y", localtime(&filmes->p[i].dataLancamento));
+            strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&filmes->p[i].dataLancamento));
             
             printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
             printf(BOLDBLACK "Nome do filme: " RESET);
             printf("%s\n", filmes->p[i].nomeFilme);
             printf(BOLDBLACK "Data de lançamento: " RESET);
-            printf("%s\n", dataFinal);
+            printf("%s\n", dateFinal);
             printf(BOLDBLACK "Duração do filme: " RESET);
             printf("%d min\n", filmes->p[i].duracaoFilme);
         }

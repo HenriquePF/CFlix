@@ -41,11 +41,11 @@ void CatalogoLista(void) {
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }
-        } while(option != '1');
+        } while (option != '1');
         
     } else {
         
-        do{
+        do {
             printf( BOLDBLACK"\n1 - Retornar:\n2 - Editar\n3 - Deletar\n" RESET);
             printf("-> ");
             scanf("%c", &option);
@@ -66,6 +66,6 @@ void CatalogoLista(void) {
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }
-        } while(option != '1');
+        } while (option != '1');
     }
 }
