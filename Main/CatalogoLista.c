@@ -16,13 +16,13 @@ void CatalogoLista(void) {
     ClearScreen();
     
     char option = 0;
-    struct Array *filmes = GetFilmes();
+    struct Array *movie = GetFilmes();
     
     printf(BOLDBLACK "***** Catálogo - CFLIX *****\n" RESET);
     
     MovieList();
     
-    if(filmes == NULL || filmes->count == 0) {
+    if(movie == NULL || movie->count == 0) {
         do {
             printf( BOLDBLACK"\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
             printf("-> ");

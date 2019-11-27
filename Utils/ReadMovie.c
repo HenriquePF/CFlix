@@ -16,17 +16,17 @@
 void EditMovie(int index) {
     
     /* Variables */
-    struct Array *filmeEdit = GetFilmes();
+    struct Array *movieEdit = GetFilmes();
     struct filme *f = {0};
-    f = &((filmeEdit->p[index - 1]));
+    f = &((movieEdit->p[index - 1]));
     
-    char *nomeEditado = f->nomeFilme;
-    time_t *dataEditada = &f->dataLancamento;
-    int *numEditado = &f->duracaoFilme;
+    char *nameEdit = f->nomeFilme;
+    time_t *dateEdit = &f->dataLancamento;
+    int *numEdit = &f->duracaoFilme;
     
-    ReadText(f->nomeFilme, nomeEditado);
-    ReadDate(&f->dataLancamento, dataEditada);
-    ReadNumber(&f->duracaoFilme, numEditado);
+    ReadText(f->nomeFilme, nameEdit);
+    ReadDate(&f->dataLancamento, dateEdit);
+    ReadNumber(&f->duracaoFilme, numEdit);
 }
 
 /* ReadText and edit = ok */
@@ -50,7 +50,6 @@ void ReadText(char *previousText, char *resultText) {
         }
         
         newString = StringTrimmer(movieName);
-        TrimTrailing(newString);
         
         if (!previousText && isEmpty) {
             printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
@@ -68,34 +67,36 @@ void ReadText(char *previousText, char *resultText) {
 /* ReadDate and edit = ok */
 void ReadDate(time_t *previousDate, time_t *resultDate) {
     char dateRead[11] = {0}, dateTemp[11] = {0};
+    int isEmpty = 0;
     
     do {
         struct tm dataStruct = {0};
         time_t r = 0;
         
         if (previousDate) {
-            strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", localtime(previousDate));
-            printf(BOLDBLACK "\nRead Date[%s]: " RESET, dateRead);
+            strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", localtime(previousDate));
+            printf(BOLDBLACK "\nRead Date[%s]: " RESET, dateTemp);
         } else {
             printf(BOLDBLACK "Read Date\n" RESET);
             printf("-> ");
         }
         
-        fgets(dateRead, 11, stdin);
+        fgets(dateTemp, 11, stdin);
+        isEmpty = strcmp(dateTemp, "\n") == 0;
         fseek(stdin, 0, SEEK_END);
         
-        if (strcmp(dateRead, "\n") == 0 && !previousDate) {
+        if (!previousDate && isEmpty) {
             printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
         }
         
-        if (strcmp(dateRead, "\n") != 0) {
-            strcpy(dateTemp, dateRead);
+        if (!isEmpty) {
+            strcpy(dateRead, dateTemp);
             
-            strptime(dateRead, "%d/%m/%Y", &dataStruct);
+            strptime(dateTemp, "%d/%m/%Y", &dataStruct);
             r = mktime(&dataStruct);
-            strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", &dataStruct); // used only for comparison
+            strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", &dataStruct); // used only for comparison
             
-            if (strcmp(dateRead, dateTemp) == 0 && !previousDate) {
+            if (strcmp(dateTemp, dateRead) == 0 || !previousDate) {
                 *resultDate = r;
             } else {
                 printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
@@ -112,6 +113,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
 void ReadNumber(int *previousNumber, int *resultNumbers) {
     int validDigit = 0;
     char userInput[5] = {0};
+    int isEmpty = 0;
     
     do {
         
@@ -123,9 +125,10 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
         }
         
         fgets(userInput, sizeof(userInput), stdin);
+        isEmpty = strcmp(userInput, "\n") == 0;
         validDigit = atoi(userInput);
         
-        if (previousNumber && strcmp(userInput, "\n") == 0) {
+        if (previousNumber && isEmpty) {
             break;
         }
         
@@ -154,7 +157,7 @@ void MovieConfirmation(struct filme newMovie) {
         
         printf(BOLDRED "Confirmação de cadastro:\n" RESET);
         printf(BOLDBLACK "\nNome do filme: \n" RESET);
-        printf("%s\n\n", newMovie.nomeFilme);
+        printf("%s\n", newMovie.nomeFilme);
         printf(BOLDBLACK "Data de Lançamento: \n" RESET);
         printf("%s\n\n", dateFinal);
         printf(BOLDBLACK "Duração do filme: \n" RESET);

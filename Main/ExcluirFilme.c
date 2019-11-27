@@ -14,15 +14,15 @@ void ExcluirFilme() {
     
     // Variables
     ClearScreen();
-    char option = 0, delOption = 0;
+    char option = 0, deleteOption = 0;
     int index = 0;
-    struct Array *filmes = GetFilmes();
+    struct Array *movies = GetFilmes();
     
     printf(BOLDBLACK "***** Excluir filme - CFLIX *****\n" RESET);
     
     MovieList();
     
-    if(filmes == NULL || filmes->count == 0) {
+    if(movies == NULL || movies->count == 0) {
         
         do {
             
@@ -51,17 +51,17 @@ void ExcluirFilme() {
         do {
             printf(BOLDBLACK "\nExcluir(1) ou não(2)?\n" RESET);
             printf("-> ");
-            scanf("%c", &delOption);
+            scanf("%c", &deleteOption);
             fseek(stdin, 0, SEEK_END);
             
-            switch (delOption) {
+            switch (deleteOption) {
                 case '1':
                     printf(BOLDBLACK "\nEntre com o ID para deletar o filme:\n" RESET);
                     printf("-> ");
                     scanf("%d", &index);
                     fseek(stdin, 0, SEEK_END);
                     
-                    DeleteFilme(filmes, index - 1);
+                    DeleteFilme(movies, index - 1);
                     
                 case '2':
                     break;
@@ -71,7 +71,7 @@ void ExcluirFilme() {
                     break;
             }
             
-        } while (delOption != '1' && delOption != '2');
+        } while (deleteOption != '1' && deleteOption != '2');
         
         do {
             printf(BOLDBLACK "\n1 - Menu:\n2 - Catalogo:\n" RESET);

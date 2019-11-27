@@ -17,17 +17,17 @@ void EditarFilme() {
     
     ClearScreen();
     
-    struct Array *filmeEdit;
-    filmeEdit = GetFilmes();
+    struct Array *movieEdit;
+    movieEdit = GetFilmes();
     
-    int id = 0;
+    int index = 0;
     char option = 0;
     
     printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
     
     MovieList();
     
-    if (filmeEdit == NULL || filmeEdit->count == 0) {
+    if (movieEdit == NULL || movieEdit->count == 0) {
         
         do {
             printf(BOLDBLACK "\n1 - Retornar:\n" RESET);
@@ -59,12 +59,12 @@ void EditarFilme() {
                     
                     printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
                     printf("-> ");
-                    scanf("%d", &id);
+                    scanf("%d", &index);
                     fseek(stdin, 0, SEEK_END);
                     
                     /* TODO - Prevent the user to edit unexistent elements(id < 0 && id > last.elem.id) */
                     
-                    EditMovie(id);
+                    EditMovie(index);
                     MovieList();
                     
                     break;
