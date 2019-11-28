@@ -5,6 +5,4 @@
 
 char *StringTrimmer(char *text);
 
-void TrimTrailing(char *nomeFilme);
-
 #endif

@@ -44,6 +44,7 @@ void EditarFilme() {
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }
+            
         } while (option != '1');
         
     } else {

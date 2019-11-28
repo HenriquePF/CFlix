@@ -4,95 +4,35 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-char *StringTrimmerTEST(char *nomeFilme) {
+// Trims at begnning, middle and end;
+char *StringTrimmer(char *userInput) {
     int length, i = 0, j = 0, temp = 0;
-    char *start;
+    char *start = 0;
     
-    length = (int)strlen(nomeFilme);
+    length = (int)strlen(userInput);
     start = malloc(length + 1);
     
-    while (*(nomeFilme + i) != '\0') {
-        if (*(nomeFilme + i) == ' ') {
+    while (*(userInput + i) != '\0') {
+        if (*(userInput + i) == ' ') { // Catches ' ' at the beginning, if not...
             temp = i + 1;
-            if (*(nomeFilme + temp) != '\0') {
-                while (*(nomeFilme + temp) == ' ' && *(nomeFilme + temp) != '\0') {
-                    if (*(nomeFilme + temp) == ' ') {
-                        i++;
+     
+            if (*(userInput + temp) != '\0') {
+
+                while (*(userInput + temp) == ' ' && *(userInput + temp) != '\0') {// while userInpu + temp is ' ' AND is NOT EOF, then....
+                    if (*(userInput + temp) == ' ') { // if userInput + temp is ' '
+                        i++;// increments i....
                     }
-                    temp++;
+                    temp++; // ...and temp.
                 }
             }
-        }
-        *(start + j) = *(nomeFilme + i);
-        i++;
-        j++;
-    }
-    *(start + j)= '\0';
-    
-    return start;
-}
-
-char *StringTrimmer(char *nomeFilme) {
-    int length, i = 0, j = 0, temp = 0;
-    char *start;
-    
-    length = (int)strlen(nomeFilme);
-    
-    start = (char*) malloc(length + 1);
-    
-    while (*(nomeFilme + i) != '\0') {
-        if (*(nomeFilme + i) == ' ') {
-            temp = i + 1;
-            if (*(nomeFilme + temp) != '\0') {
-                while (*(nomeFilme + temp) == ' ' && *(nomeFilme + temp) != '\0') {
-                    if (*(nomeFilme + temp) == ' ') {
-                        i++;
-                    }
-                    temp++;
-                }
-            }
-        }
-        *(start + j) = *(nomeFilme + i);
-        i++;
-        j++;
-    }
-    *(start + j)= '\0';
-    
-    return start;
-}
-
-void TrimTrailing(char *nomeFilme) {
-    int index, i;
-    index = 0;
-    
-    i = 0;
-    while(nomeFilme[i] != '\0') {
-        if(nomeFilme[i] != ' ' && nomeFilme[i] != '\t' && nomeFilme[i] != '\n') {
-            index= i;
         }
         
+        //                        Temp
+        *(start + j) = *(userInput + i + 1); // ...gives the char to the aux string.
         i++;
+        j++;
     }
+    *(start + j) = '\0';
     
-    nomeFilme[index + 1] = '\0';
-}
-
-// Not used
-void trimLeading(char *nomeFilme) {
-    int index, i;
-    
-    index = 0;
-    
-    while(nomeFilme[index] == ' ' || nomeFilme[index] == '\t' || nomeFilme[index] == '\n') {
-        index++;
-    }
-    
-    if(index != 0) {
-        i = 0;
-        while(nomeFilme[i + index] != '\0') {
-            nomeFilme[i] = nomeFilme[i + index];
-            i++;
-        }
-        nomeFilme[i] = '\0';
-    }
+    return start;
 }

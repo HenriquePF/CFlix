@@ -43,6 +43,7 @@ void ReadText(char *previousText, char *resultText) {
         }
         
         fgets(movieName, sizeof(movieName), stdin);
+        fseek(stdin, 0, SEEK_END);
         isEmpty = strcmp(movieName, "\n") == 0;
         
         if (previousText && isEmpty) {
