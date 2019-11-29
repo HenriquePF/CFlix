@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-char *StringTrimmer(char *text);
+char *StringTrimmer(char *userInput);
 
 #endif
