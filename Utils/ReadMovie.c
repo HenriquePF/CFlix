@@ -158,7 +158,7 @@ void MovieConfirmation(struct filme newMovie) {
         
         printf(BOLDRED "Confirmação de cadastro:\n" RESET);
         printf(BOLDBLACK "\nNome do filme: \n" RESET);
-        printf("%s\n", newMovie.nomeFilme);
+        printf("%s\n\n", newMovie.nomeFilme);
         printf(BOLDBLACK "Data de Lançamento: \n" RESET);
         printf("%s\n\n", dateFinal);
         printf(BOLDBLACK "Duração do filme: \n" RESET);

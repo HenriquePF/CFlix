@@ -14,16 +14,11 @@ void ReadNumber(int *previousNumber, int *resultNumber);
 
 /* -------------------------------------------------------------- */
 // Movie Functions
-void ReadMovieName(char *prevName, struct filme *movie);
-
-void ReadMovieDate(long *prevDate, struct filme *movie);
-
-void ReadMovieDuration(int *prevDuration, struct filme *movie);
-
 void EditMovie(int id);
 
 void MovieConfirmation(struct filme movieCheck);
 
 void MovieList(void);
+/* -------------------------------------------------------------- */
 
 #endif

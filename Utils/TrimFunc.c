@@ -10,7 +10,7 @@ char *StringTrimmer(char *userInput) {
     
     length = (int)strlen(userInput);
     start = malloc(length + 1);
-
+    
     while (*(userInput + i) != '\0') {
         
         if (*(userInput + i) == ' ') {
@@ -29,12 +29,12 @@ char *StringTrimmer(char *userInput) {
         if (j == 0 && *(userInput + i) == ' ') {
             i++;
         }
-
+        
         *(start + j) = *(userInput + i);
         i++;
         j++;
     }
     
-//    *(start + j) = '\0';
+    *(start + j - 1)     = '\0';
     return start;
 }
