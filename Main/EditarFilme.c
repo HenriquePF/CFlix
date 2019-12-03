@@ -17,8 +17,7 @@ void EditarFilme() {
     
     ClearScreen();
     
-    struct Array *movieEdit;
-    movieEdit = GetFilmes();
+    struct Array *movieEdit = GetFilmes();
     
     int index = 0;
     char option = 0;
@@ -63,11 +62,9 @@ void EditarFilme() {
                     scanf("%d", &index);
                     fseek(stdin, 0, SEEK_END);
                     
-                    /* TODO - Prevent the user to edit unexistent elements(id < 0 && id > last.elem.id) */
-                    
-                    EditMovie(index);
                     MovieList();
-                    
+                    EditMovie(index);
+
                     break;
                     
                 case '2':

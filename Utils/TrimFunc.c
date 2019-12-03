@@ -34,7 +34,7 @@ char *StringTrimmer(char *userInput) {
         i++;
         j++;
     }
-    
-    *(start + j - 1)     = '\0';
+
+    *(start + j - 1) = '\0';
     return start;
 }

@@ -18,7 +18,7 @@ void EditMovie(int index) {
     /* Variables */
     struct Array *movieEdit = GetFilmes();
     struct filme *f = {0};
-    f = &((movieEdit->p[index - 1]));
+    f = &(movieEdit->p[index - 1]);
     
     char *nameEdit = f->nomeFilme;
     time_t *dateEdit = &f->dataLancamento;
@@ -36,7 +36,7 @@ void ReadText(char *previousText, char *resultText) {
     
     do {
         if (previousText) {
-            printf(BOLDBLACK "\nRead Text [%s]: " RESET, previousText);
+            printf(BOLDBLACK "\nEdit  Text [%s]: " RESET, previousText);
         } else {
             printf(BOLDBLACK "\nRead Text:\n" RESET);
             printf("-> ");
@@ -52,7 +52,7 @@ void ReadText(char *previousText, char *resultText) {
         
         newString = StringTrimmer(movieName);
         
-        if (!previousText && isEmpty) {
+        if (isEmpty && !previousText) {
             printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
         }
         
@@ -68,7 +68,7 @@ void ReadText(char *previousText, char *resultText) {
 /* ReadDate and edit = ok */
 void ReadDate(time_t *previousDate, time_t *resultDate) {
     char dateRead[11] = {0}, dateTemp[11] = {0};
-    int isEmpty = 0;
+    int isEmpty = 0, isEqual = 0;
     
     do {
         struct tm dataStruct = {0};
@@ -76,7 +76,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
         
         if (previousDate) {
             strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", localtime(previousDate));
-            printf(BOLDBLACK "\nRead Date[%s]: " RESET, dateTemp);
+            printf(BOLDBLACK "\nEdit Date[%s]: " RESET, dateTemp);
         } else {
             printf(BOLDBLACK "Read Date\n" RESET);
             printf("-> ");
@@ -86,28 +86,33 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
         isEmpty = strcmp(dateTemp, "\n") == 0;
         fseek(stdin, 0, SEEK_END);
         
-        if (!previousDate && isEmpty) {
-            printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
-        }
-        
-        if (!isEmpty) {
-            strcpy(dateRead, dateTemp);
-            
-            strptime(dateTemp, "%d/%m/%Y", &dataStruct);
-            r = mktime(&dataStruct);
-            strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", &dataStruct); // used only for comparison
-            
-            if (strcmp(dateTemp, dateRead) == 0 || !previousDate) {
-                *resultDate = r;
-            } else {
-                printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
-            }
-            
-        } else {
+        if (isEmpty && previousDate) {
             break;
         }
         
-    } while (strcmp(dateRead, "\n") != 0 && (strcmp(dateRead, dateTemp) != 0));
+        strcpy(dateRead, dateTemp);
+        
+        strptime(dateTemp, "%d/%m/%Y", &dataStruct);
+        r = mktime(&dataStruct);
+        strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", &dataStruct);
+        isEqual = strcmp(dateTemp, dateRead) == 0;
+
+        if ((isEmpty && !previousDate) || (!isEqual && !previousDate) || (!isEqual && previousDate)) {
+            printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
+        }
+        
+        if (isEqual && !previousDate) {
+            *resultDate = r;
+            break;
+        }
+        
+        if (isEqual && previousDate) {
+            *resultDate = r;
+            break;
+        }
+
+ 
+    } while (!isEqual);
 }
 
 /* ReadNumber and edit = ok */
@@ -119,7 +124,7 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
     do {
         
         if (previousNumber) {
-            printf(BOLDBLACK "\nRead Number[%d]: " RESET, *previousNumber);
+            printf(BOLDBLACK "\nEdit Number[%d]: " RESET, *previousNumber);
         } else {
             printf(BOLDBLACK "Read Number:\n" RESET);
             printf("-> ");
@@ -186,7 +191,33 @@ void MovieConfirmation(struct filme newMovie) {
     } while (confirm != '1' && confirm != '2');
 }
 
-/* Movie List */
+/* Save File Function */
+void saveEntryFile(struct filme newEntry) {
+    int size = 0;
+    FILE *filePtr = 0;
+    
+    filePtr = fopen("/Users/henriquepetters/Desktop/CFlix/CFlix/EntryBackup.txt", "r+");
+    
+    if (NULL != filePtr) {
+        fseek (filePtr, 0, SEEK_END);
+        size = (int)ftell(filePtr);
+        
+        if (0 == size) {
+            printf("file is empty\n");
+        }
+    }
+
+    
+    
+    
+}
+
+/* Retrieve File Function */
+void retrieveEntryFile() {
+    
+}
+
+/* Element List */
 void MovieList() {
     
     /* Variables  */
