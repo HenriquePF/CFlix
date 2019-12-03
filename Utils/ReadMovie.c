@@ -12,13 +12,85 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-/* Movie Edit Function */
-void EditMovie(int index) {
+/*
+ General Ideas....
+ 
+ 1 - Case One:
+ 1.1 - Function to check if file is null(empty or not);
+ 
+ 2 - Case Two:
+ 2.1 - In case of !null, the program will read the file, showing the entries previously saved;
+ 2.2 - MovieList will be implemented with retrieveEntryFile();
+ 
+ 3 - Case Three:
+ 3.1 - Saves new entries only when user confirms the entry right after MovieConfirmation function;
+ 3.2 - MovieConfirmation will be implemented with saveEntryFile();
+ 
+ 4 - Case Four(Tricky one):
+ 4.1 - When edition comes to play, it will be edited in the file;
+ 4.2 - By this point my brain is melting...
+ 
+ --> OBS: All of the file functions will serve as auxiliary functions for the main ones. <--
+ --> OBS 2: Change movie related names to general purpose funciton names! <--
+ 
+ Functions:
+ void saveEntryFile(TBD);
+ void editBackUpFile(TBD);
+ void retrieveEntryFile(TBD);
+ void deleteEntryFile(TBD);
+
+ CRUD
+ Create - saveEntryFile(TBD);
+ Retrieve - retrieveEntryFile(TBD);
+ UpDate - editBackUpFile(TBD); -
+ Delete - deleteEntryFile(TBD); - The order in the file will change... brain is definitely gone now.
+ 
+ */
+
+/* Save Entry File Function */
+void saveEntryFile() {
+    
+}
+
+/* Retrieve Entry File Function */
+void retrieveEntryFile() {
+    
+}
+
+/* Edit Entry File Function */
+void editBackUpFile() {
+    
+}
+
+/* Delete Entry File Function */
+void deleteEntryFile() {
+    
+}
+
+/* Check Entry File Function */
+void entryFileChecker(struct filme newEntry) {
+    int size = 0;
+    FILE *filePtr = 0;
+    
+    filePtr = fopen("EntryBackup.txt", "r+");
+    
+    if (NULL != filePtr) {
+        fseek (filePtr, 0, SEEK_END);
+        size = (int)ftell(filePtr);
+        
+        if (0 == size) {
+            printf(BOLDRED "Arquivo vazio.\n" RESET);
+        }
+    }
+}
+
+/* ENTRY Edit Function */
+void EntryEdit(int index) {
     
     /* Variables */
-    struct Array *movieEdit = GetFilmes();
+    struct Array *entryEdit = GetFilmes();
     struct filme *f = {0};
-    f = &(movieEdit->p[index - 1]);
+    f = &(entryEdit->p[index - 1]);
     
     char *nameEdit = f->nomeFilme;
     time_t *dateEdit = &f->dataLancamento;
@@ -31,7 +103,7 @@ void EditMovie(int index) {
 
 /* ReadText and edit = ok */
 void ReadText(char *previousText, char *resultText) {
-    char movieName[199] = {0}, *newString = 0;
+    char elementName[199] = {0}, *newString = 0;
     int isEmpty = 0;
     
     do {
@@ -42,15 +114,15 @@ void ReadText(char *previousText, char *resultText) {
             printf("-> ");
         }
         
-        fgets(movieName, sizeof(movieName), stdin);
+        fgets(elementName, sizeof(elementName), stdin);
         fseek(stdin, 0, SEEK_END);
-        isEmpty = strcmp(movieName, "\n") == 0;
+        isEmpty = strcmp(elementName, "\n") == 0;
         
         if (previousText && isEmpty) {
             break;
         }
         
-        newString = StringTrimmer(movieName);
+        newString = StringTrimmer(elementName);
         
         if (isEmpty && !previousText) {
             printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
@@ -147,8 +219,8 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
     } while (!validDigit);
 }
 
-/* Movie Confirmation */
-void MovieConfirmation(struct filme newMovie) {
+/* Entry Confirmation */
+void EntryConfirmation(struct filme newEntry) {
     time_t r;
     struct tm dateStruct = {0};
     char dateFinal[11] = {0}, dateInitial[11] = {0}, confirm = 0;
@@ -157,17 +229,17 @@ void MovieConfirmation(struct filme newMovie) {
     r = mktime(&dateStruct);
     
     do {
-        strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&newMovie.dataLancamento));
+        strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&newEntry.dataLancamento));
         
         ClearScreen();
         
         printf(BOLDRED "Confirmação de cadastro:\n" RESET);
         printf(BOLDBLACK "\nNome do filme: \n" RESET);
-        printf("%s\n\n", newMovie.nomeFilme);
+        printf("%s\n\n", newEntry.nomeFilme);
         printf(BOLDBLACK "Data de Lançamento: \n" RESET);
         printf("%s\n\n", dateFinal);
         printf(BOLDBLACK "Duração do filme: \n" RESET);
-        printf("%d min\n", newMovie.duracaoFilme);
+        printf("%d min\n", newEntry.duracaoFilme);
         printf(BOLDRED "\nSalvar(1) ou descartar(2)?\n" RESET);
         printf("-> ");
         scanf("%c", &confirm);
@@ -177,7 +249,7 @@ void MovieConfirmation(struct filme newMovie) {
             case '1':
                 ClearScreen();
                 printf(BOLDRED "Filme salvo!\n" RESET);
-                AddFilme(newMovie);
+                AddFilme(newEntry);
                 break;
                 
             case '2':
@@ -191,37 +263,11 @@ void MovieConfirmation(struct filme newMovie) {
     } while (confirm != '1' && confirm != '2');
 }
 
-/* Save File Function */
-void saveEntryFile(struct filme newEntry) {
-    int size = 0;
-    FILE *filePtr = 0;
-    
-    filePtr = fopen("/Users/henriquepetters/Desktop/CFlix/CFlix/EntryBackup.txt", "r+");
-    
-    if (NULL != filePtr) {
-        fseek (filePtr, 0, SEEK_END);
-        size = (int)ftell(filePtr);
-        
-        if (0 == size) {
-            printf("file is empty\n");
-        }
-    }
-
-    
-    
-    
-}
-
-/* Retrieve File Function */
-void retrieveEntryFile() {
-    
-}
-
-/* Element List */
-void MovieList() {
+/* Entry List */
+void EntryList() {
     
     /* Variables  */
-    struct Array *filmes = GetFilmes();
+    struct Array *entries = GetFilmes();
     
     time_t r;
     struct tm dateStruct = {0};
@@ -230,19 +276,19 @@ void MovieList() {
     r = mktime(&dateStruct);
     strftime(dateInitial, sizeof(dateInitial), "%d/%m/%Y", &dateStruct);
     
-    if(filmes == NULL || filmes->count == 0) {
+    if(entries == NULL || entries->count == 0) {
         printf(BOLDRED "\nLISTA VAZIA.\n" RESET);
     } else {
-        for (int i = 0; i < filmes->count; i++) {
-            strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&filmes->p[i].dataLancamento));
+        for (int i = 0; i < entries->count; i++) {
+            strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
             
             printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
             printf(BOLDBLACK "Nome do filme: " RESET);
-            printf("%s\n", filmes->p[i].nomeFilme);
+            printf("%s\n", entries->p[i].nomeFilme);
             printf(BOLDBLACK "Data de lançamento: " RESET);
             printf("%s\n", dateFinal);
             printf(BOLDBLACK "Duração do filme: " RESET);
-            printf("%d min\n", filmes->p[i].duracaoFilme);
+            printf("%d min\n", entries->p[i].duracaoFilme);
         }
     }
 }

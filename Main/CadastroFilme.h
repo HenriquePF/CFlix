@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void CadastrarFilme(void);
+void EntryRegister(void);
 
 #endif

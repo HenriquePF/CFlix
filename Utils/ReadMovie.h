@@ -14,11 +14,11 @@ void ReadNumber(int *previousNumber, int *resultNumber);
 
 /* -------------------------------------------------------------- */
 // Movie Functions
-void EditMovie(int id);
+void EntryEdit(int id);
 
-void MovieConfirmation(struct filme movieCheck);
+void EntryConfirmation(struct filme movieCheck);
 
-void MovieList(void);
+void EntryList(void);
 /* -------------------------------------------------------------- */
 
 #endif

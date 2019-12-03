@@ -2,10 +2,10 @@
 #define structFilme_h
 
 #include "TelaMain.h"
-#include "CatalogoLista.h"
+#include "EntryCatalog.h"
 #include "CadastroFilme.h"
-#include "EditarFilme.h"
-#include "ExcluirFilme.h"
+#include "EditEntry.h"
+#include "ExcludeEntry.h"
 #include <time.h>
 
 #define NOME 200

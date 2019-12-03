@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void CatalogoLista(void);
-void MovieList(void);
+void EntryCatalog(void);
+void EntryList(void);
 #endif /* catalogoLista_h */

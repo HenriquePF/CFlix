@@ -14,15 +14,15 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void CadastrarFilme(void) {
+void EntryRegister(void) {
     ClearScreen();
     
     /*  Variables */
-    struct filme newMovie = {0};
+    struct filme newEntry = {0};
     
-    char *name = newMovie.nomeFilme;
-    time_t *date = &newMovie.dataLancamento;
-    int *num = &newMovie.duracaoFilme;
+    char *name = newEntry.nomeFilme;
+    time_t *date = &newEntry.dataLancamento;
+    int *num = &newEntry.duracaoFilme;
     
     char option = 0;
     
@@ -38,7 +38,7 @@ void CadastrarFilme(void) {
     ReadNumber(NULL, num);
     
     /* Movie/Entry Confirmation Function */
-    MovieConfirmation(newMovie);
+    EntryConfirmation(newEntry);
     
     /* Movie confirmation Function */
     // saveEntryFile();
@@ -55,7 +55,7 @@ void CadastrarFilme(void) {
                 break;
                 
             case '2':
-                return CadastrarFilme();
+                return EntryRegister();
                 
             default:
                 printf(BOLDRED "Entrada inválida. Tente novamente." RESET);

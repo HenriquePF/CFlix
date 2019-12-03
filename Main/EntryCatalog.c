@@ -12,17 +12,17 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void CatalogoLista(void) {
+void EntryCatalog(void) {
     ClearScreen();
     
     char option = 0;
-    struct Array *movie = GetFilmes();
+    struct Array *entry = GetFilmes();
     
     printf(BOLDBLACK "***** Catálogo - CFLIX *****\n" RESET);
     
-    MovieList();
+    EntryList();
     
-    if(movie == NULL || movie->count == 0) {
+    if(entry == NULL || entry->count == 0) {
         do {
             printf( BOLDBLACK"\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
             printf("-> ");
@@ -34,7 +34,7 @@ void CatalogoLista(void) {
                     break;
                     
                 case '2':
-                    return CadastrarFilme();
+                    return EntryRegister();
                     break;
                     
                 default:
@@ -57,10 +57,10 @@ void CatalogoLista(void) {
                     break;
                     
                 case '2':
-                    return EditarFilme();
+                    return EditEntry();
                     
                 case '3':
-                    return ExcluirFilme();
+                    return ExcludeEntry();
                     
                 default:
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);

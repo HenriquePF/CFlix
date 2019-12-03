@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void EditarFilme(void);
+void EditEntry(void);
 
 #endif /* editarFilme_h */

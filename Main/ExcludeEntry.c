@@ -10,19 +10,19 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void ExcluirFilme() {
+void ExcludeEntry() {
     
     // Variables
     ClearScreen();
     char option = 0, deleteOption = 0;
     int index = 0;
-    struct Array *movies = GetFilmes();
+    struct Array *entries = GetFilmes();
     
     printf(BOLDBLACK "***** Excluir filme - CFLIX *****\n" RESET);
     
-    MovieList();
+    EntryList();
     
-    if(movies == NULL || movies->count == 0) {
+    if(entries == NULL || entries->count == 0) {
         
         do {
             
@@ -36,7 +36,7 @@ void ExcluirFilme() {
                     break;
                     
                 case '2':
-                    return CadastrarFilme();
+                    return EntryRegister();
                     break;
                     
                 default:
@@ -61,7 +61,7 @@ void ExcluirFilme() {
                     scanf("%d", &index);
                     fseek(stdin, 0, SEEK_END);
                     
-                    DeleteFilme(movies, index - 1);
+                    DeleteFilme(entries, index - 1);
                     
                 case '2':
                     break;
@@ -84,7 +84,7 @@ void ExcluirFilme() {
                     break;
                     
                 case '2':
-                    return CatalogoLista();
+                    return EntryCatalog();
                     
                 default:
                     printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);

@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "CatalogoLista.h"
+#include "EntryCatalog.h"
 #include "CadastroFilme.h"
-#include "EditarFilme.h"
-#include "ExcluirFilme.h"
+#include "EditEntry.h"
+#include "ExcludeEntry.h"
 #include "ClearScreen.h"
 #include "Filme.h"
 #include "ReadMovie.h"
@@ -35,19 +35,19 @@ int main(void) {
         
         switch (option) {
             case '1':
-                CatalogoLista();
+                EntryCatalog();
                 break;
                 
             case '2':
-                CadastrarFilme();
+                EntryRegister();
                 break;
                 
             case '3':
-                EditarFilme();
+                EditEntry();
                 break;
                 
             case '4':
-                ExcluirFilme();
+                ExcludeEntry();
                 break;
                 
             case '5':
