@@ -13,14 +13,14 @@
 struct Array {
     int count;
     int reserved;
-    struct Array *next;
     struct filme *p;
 };
 
 struct filme {
-    char nomeFilme[NOME];
-    time_t dataLancamento;
-    int duracaoFilme;
+    char nomeFilme[NOME]; // 200 bits
+    time_t dataLancamento; // long 64 bits
+    int duracaoFilme; // int 32
+    // 298 bits?
 };
 
 void AddFilme(struct filme f);

@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void ExcluirFilme(void);
+void ExcludeEntry(void);
 
 #endif /* excluirFilme_h */

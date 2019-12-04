@@ -30,8 +30,9 @@
  4.1 - When edition comes to play, it will be edited in the file;
  4.2 - By this point my brain is melting...
  
- --> OBS: All of the file functions will serve as auxiliary functions for the main ones. <--
- --> OBS 2: Change movie related names to general purpose funciton names! <--
+ --> OBS: Binary files <--
+ --> OBS 2: All of the file functions will serve as auxiliary functions for the main ones. <--
+ --> OBS 3: Change movie related names to general purpose funciton names! <--
  
  Functions:
  void saveEntryFile(TBD);
@@ -44,17 +45,52 @@
  Retrieve - retrieveEntryFile(TBD);
  UpDate - editBackUpFile(TBD); -
  Delete - deleteEntryFile(TBD); - The order in the file will change... brain is definitely gone now.
- 
+
  */
 
+/* --------------- //\\ --------------- */
 /* Save Entry File Function */
-void saveEntryFile() {
+void saveEntryFile(struct filme newEntry) {
     
+    // Every time this functions gets used, it allocates memory for every new entry to be saved.
+    
+    FILE *filePtr = 0;
+    char filePath[60] = "/Users/henriquepetters/Desktop/CFlix/CFlix/EntryBackup.bin";
+    // file name: EntryBackup.bin
+    filePtr = fopen(filePath, "wb");
+    
+    // Check?
+    if (!filePtr) {
+        printf(BOLDRED "Arquivo inexistente.\n" RESET);
+    }
+    
+    // Malloc memory
+//    struct filme *teste = malloc(sizeof(struct filme));
+//    fwrite(&teste, sizeof(struct filme), 1, filePtr); -> no need to malloc, right?
+    
+    
+    // Writing the structure
+    fwrite(&newEntry, sizeof(struct filme), 1, filePtr);
+    
+    fclose(filePtr);
 }
 
 /* Retrieve Entry File Function */
-void retrieveEntryFile() {
+void retrieveEntryFile(struct filme readEntry) {
+    FILE *filePtr = 0;
+    char filePath[60] = "/Users/henriquepetters/Desktop/CFlix/CFlix/EntryBackup.bin";
     
+    filePtr = fopen(filePath, "wb");
+    
+    // Check?
+    if (!filePtr) {
+        printf(BOLDRED "Arquivo inexistente.\n" RESET);
+    }
+    
+    fread(&readEntry, sizeof(struct filme) * 3, 1, filePtr);
+    printf("Nome: %s \nData(unix): %ld \nDuração: %d", readEntry.nomeFilme, readEntry.dataLancamento, readEntry.duracaoFilme);
+    
+    fclose(filePtr);
 }
 
 /* Edit Entry File Function */
@@ -83,6 +119,7 @@ void entryFileChecker(struct filme newEntry) {
         }
     }
 }
+/* --------------- \\// --------------- */
 
 /* ENTRY Edit Function */
 void EntryEdit(int index) {
@@ -250,6 +287,7 @@ void EntryConfirmation(struct filme newEntry) {
                 ClearScreen();
                 printf(BOLDRED "Filme salvo!\n" RESET);
                 AddFilme(newEntry);
+                saveEntryFile(newEntry);
                 break;
                 
             case '2':
@@ -265,9 +303,10 @@ void EntryConfirmation(struct filme newEntry) {
 
 /* Entry List */
 void EntryList() {
-    
     /* Variables  */
     struct Array *entries = GetFilmes();
+    
+    
     
     time_t r;
     struct tm dateStruct = {0};
@@ -281,7 +320,7 @@ void EntryList() {
     } else {
         for (int i = 0; i < entries->count; i++) {
             strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
-            
+                retrieveEntryFile(*entries->p);
             printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
             printf(BOLDBLACK "Nome do filme: " RESET);
             printf("%s\n", entries->p[i].nomeFilme);
