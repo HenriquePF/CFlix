@@ -25,7 +25,7 @@ void saveEntryFile(struct filme newEntry) {
 }
 
 /* Retrieve Entry File Function */
-void retrieveEntryFile(struct filme readEntry) {
+void retrieveEntryFile(struct filme readEntry) { // How make sure the function retrieves all the data/elements?
     char dateRead[11] = {0};
     struct tm *dataStruct = localtime(&readEntry.dataLancamento);
     FILE *filePtr = 0;
@@ -46,13 +46,26 @@ void retrieveEntryFile(struct filme readEntry) {
 }
 
 /* Edit Entry File Function */
-void editBackUpFile() {
+void editBackUpFile(struct Array removeEntry, int index) {
+    //fseek
     
+    /*
+     1 - How seek for the rigth index?
+     2 - Make id another element in the struct?
+     3 - Holly fucking shit!
+     */
 }
 
 /* Delete Entry File Function */
 void deleteEntryFile() {
+    //fseek
     
+    /*
+    1 - How seek for the rigth index?
+    2 - Make id another element in the struct?
+    3 - Get the id, fseek moves by the id value and blablabla...
+    4 - i'll blow my fucking head off... swear on me mum
+    */
 }
 /* --------------- XXX --------------- */
 
