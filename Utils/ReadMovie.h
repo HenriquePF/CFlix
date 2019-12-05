@@ -20,5 +20,6 @@ void EntryConfirmation(struct filme movieCheck);
 
 void EntryList(void);
 /* -------------------------------------------------------------- */
+void retrieveEntryFile(struct filme entries);
 
 #endif
