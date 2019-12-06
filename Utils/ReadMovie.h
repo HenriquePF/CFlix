@@ -11,7 +11,6 @@ void ReadText(char *previousText, char *resultText);
 void ReadDate(time_t *previousDate, time_t *resultDate);
 
 void ReadNumber(int *previousNumber, int *resultNumber);
-
 /* -------------------------------------------------------------- */
 // Movie Functions
 void EntryEdit(int id);
@@ -20,6 +19,6 @@ void EntryConfirmation(struct filme movieCheck);
 
 void EntryList(void);
 /* -------------------------------------------------------------- */
-void retrieveEntryFile(struct filme entries);
+void retrieveEntryFile(void);
 
 #endif

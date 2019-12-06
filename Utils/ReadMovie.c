@@ -13,34 +13,35 @@
 #define RESET       "\033[0m"              /* RESET */
 
 /* --------------- XXX --------------- */
-
 /* Save Entry File Function */
-void saveEntryFile(struct filme newEntry) {
+void saveEntryFile(struct filme newEntry) { // struct as an argument to get the struct and save in file
     FILE *filePtr = 0;
-    char filePath[60] = "/Users/henriquepetters/Desktop/CFlix/CFlix/EntryBackup.bin";
-    filePtr = fopen(filePath, "wb"); // should be "rb"
-    
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "ab"); // ab for appending in binary
     fwrite(&newEntry, sizeof(struct filme), 1, filePtr);
+    // add space with fwrite!
     fclose(filePtr);
 }
 
 /* Retrieve Entry File Function */
-void retrieveEntryFile(struct filme readEntry) { // How make sure the function retrieves all the data/elements?
-    char dateRead[11] = {0};
-    struct tm *dataStruct = localtime(&readEntry.dataLancamento);
+void retrieveEntryFile() {
+    char dateRead[11] = {0}; // Date treatment
+    struct filme readEntry = {0};
+    struct tm *dataStruct = {0};
     FILE *filePtr = 0;
-    char filePath[60] = "/Users/henriquepetters/Desktop/CFlix/CFlix/EntryBackup.bin";
+    char *filePath = "./EntryBackup.bin";
     
     filePtr = fopen(filePath, "rb");
     
     if (!filePtr) {
         printf(BOLDRED "Arquivo inexistente.\n" RESET);
     }
-    
-    fread(&readEntry, sizeof(struct filme), 1, filePtr);
-    strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
-    printf("Nome: %s \nData: %s \nDuração: %d\n\n", readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
-    fseek(filePtr, sizeof(struct filme), SEEK_CUR);
+
+    while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
+        dataStruct = localtime(&readEntry.dataLancamento);
+            strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
+        printf("Nome: %s \nData(ItsFckd): %s \nDuração: %d\n\n", readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
+    }// Change the \n.
     
     fclose(filePtr);
 }
@@ -50,9 +51,18 @@ void editBackUpFile(struct Array removeEntry, int index) {
     //fseek
     
     /*
+     OBS.: User must insert the ID or....?
      1 - How seek for the rigth index?
      2 - Make id another element in the struct?
      3 - Holly fucking shit!
+     4 - fseek FOR SPECIFIC POSITION
+     */
+    
+    /*
+     1 - For the right index:
+     1.1 - read the list;
+     1.2 - Loop through the list comparing the index put by user with the indexes in the list;
+     1.3 - blablablasuccmahdicblablabla
      */
 }
 
@@ -61,11 +71,19 @@ void deleteEntryFile() {
     //fseek
     
     /*
+    OBS.: User must insert the ID or....?
     1 - How seek for the rigth index?
     2 - Make id another element in the struct?
     3 - Get the id, fseek moves by the id value and blablabla...
     4 - i'll blow my fucking head off... swear on me mum
     */
+    
+    /*
+     1 - For the right index:
+     1.1 - read the list;
+     1.2 - Loop through the list comparing the index put by user with the indexes in the list;
+     1.3 - blablablasuccmahdicblablabla
+     */
 }
 /* --------------- XXX --------------- */
 
@@ -264,7 +282,7 @@ void EntryList() {
     } else {
         for (int i = 0; i < entries->count; i++) {
             strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
-            retrieveEntryFile(*entries->p);
+//            retrieveEntryFile();
             printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
             printf(BOLDBLACK "Nome do filme: " RESET);
             printf("%s\n", entries->p[i].nomeFilme);

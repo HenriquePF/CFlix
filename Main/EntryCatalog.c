@@ -6,6 +6,7 @@
 #include "TelaMain.h"
 #include "ClearScreen.h"
 #include "Filme.h"
+#include "ReadMovie.h"
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
 #define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
@@ -20,7 +21,8 @@ void EntryCatalog(void) {
     
     printf(BOLDBLACK "***** Catálogo - CFLIX *****\n" RESET);
     
-    EntryList();
+//    EntryList();
+    retrieveEntryFile();
     if(entry == NULL || entry->count == 0) {
         do {
             printf( BOLDBLACK"\n1 - Retornar:\n2 - Cadastrar:\n" RESET);

@@ -20,7 +20,6 @@ struct filme {
     char nomeFilme[NOME]; // 200 bits
     time_t dataLancamento; // long 64 bits
     int duracaoFilme; // int 32
-    // 298 bits?
 };
 
 void AddFilme(struct filme f);
