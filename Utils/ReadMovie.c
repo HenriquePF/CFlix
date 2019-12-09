@@ -301,6 +301,17 @@ void RetrieveEntryFile() {
 
 /* Edit Entry File Function */
 void EditBackUpFile(int index) {
+    struct filme editBinValue = {0};
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "wb"); // ab for appending in binary
+    
+    if (filePtr == NULL) {
+        printf(BOLDRED "Arquivo Inexistente.\n" RESET);
+    }
+    
+    fseek(filePtr, (index - 1)*sizeof(struct filme), SEEK_SET);
+    fread(<#void *restrict __ptr#>, <#size_t __size#>, <#size_t __nitems#>, <#FILE *restrict __stream#>);
 }
 
 /* Delete Entry File Function */

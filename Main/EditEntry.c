@@ -19,7 +19,7 @@ void EditEntry() {
     
     struct Array *movieEdit = GetFilmes();
     
-    int index = 0;
+    int id = 0;
     char option = 0;
     
     printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
@@ -59,11 +59,11 @@ void EditEntry() {
                     
                     printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
                     printf("-> ");
-                    scanf("%d", &index);
+                    scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
                     
 //                    EntryList();
-                    EntryEdit(index);
+                    EntryEdit(id);
                     
                     break;
                     
