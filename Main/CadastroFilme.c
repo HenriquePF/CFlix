@@ -20,6 +20,7 @@ void EntryRegister(void) {
     /*  Variables */
     struct filme newEntry = {0};
     
+    int *id = &newEntry.entryId;
     char *name = newEntry.nomeFilme;
     time_t *date = &newEntry.dataLancamento;
     int *num = &newEntry.duracaoFilme;
@@ -27,6 +28,9 @@ void EntryRegister(void) {
     char option = 0;
     
     printf(BOLDBLACK "***** Cadastro de flmes - CFLIX *****\n" RESET);
+    
+    /* Read Text Function */
+    ReadId(NULL, id);
     
     /* Read Text Function */
     ReadText(NULL, name);
@@ -41,7 +45,7 @@ void EntryRegister(void) {
     EntryConfirmation(newEntry);
     
     /* Movie confirmation Function */
-    // saveEntryFile();
+    SaveEntryFile(newEntry);
     
     /* Menu */
     do{

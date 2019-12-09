@@ -6,6 +6,8 @@
 
 /* -------------------------------------------------------------- */
 // Generic Functions
+void ReadId(int *previousId, int *resultId);
+
 void ReadText(char *previousText, char *resultText);
 
 void ReadDate(time_t *previousDate, time_t *resultDate);
@@ -19,6 +21,11 @@ void EntryConfirmation(struct filme movieCheck);
 
 void EntryList(void);
 /* -------------------------------------------------------------- */
-void retrieveEntryFile(void);
 
+/* File Functions */
+void SaveEntryFile(struct filme newEntry);
+void RetrieveEntryFile(void);
+void EditBackUpFile(struct Array removeEntry, int index);
+void DeleteEntryFile(void);
+/* -------------------------------------------------------------- */
 #endif

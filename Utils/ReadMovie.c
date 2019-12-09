@@ -14,7 +14,7 @@
 
 /* --------------- XXX --------------- */
 /* Save Entry File Function */
-void saveEntryFile(struct filme newEntry) { // struct as an argument to get the struct and save in file
+void SaveEntryFile(struct filme newEntry) { // struct as an argument to get the struct and save in file
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
     filePtr = fopen(filePath, "ab"); // ab for appending in binary
@@ -24,7 +24,7 @@ void saveEntryFile(struct filme newEntry) { // struct as an argument to get the 
 }
 
 /* Retrieve Entry File Function */
-void retrieveEntryFile() {
+void RetrieveEntryFile() {
     char dateRead[11] = {0}; // Date treatment
     struct filme readEntry = {0};
     struct tm *dataStruct = {0};
@@ -36,19 +36,24 @@ void retrieveEntryFile() {
     if (!filePtr) {
         printf(BOLDRED "Arquivo inexistente.\n" RESET);
     }
-
+    
     while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
         dataStruct = localtime(&readEntry.dataLancamento);
-            strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
-        printf("Nome: %s \nData(ItsFckd): %s \nDuração: %d\n\n", readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
-    }// Change the \n.
+        strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
+        printf("Id: %d \nNome: %s \nData(ItsFckd): %s \nDuração: %d\n\n", readEntry.entryId, readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
+    }
     
     fclose(filePtr);
 }
 
 /* Edit Entry File Function */
-void editBackUpFile(struct Array removeEntry, int index) {
+void EditBackUpFile(struct Array removeEntry, int index) {
     //fseek
+    
+    /*
+     1 - First, user inputs the id;
+     2 -
+     */
     
     /*
      OBS.: User must insert the ID or....?
@@ -67,16 +72,16 @@ void editBackUpFile(struct Array removeEntry, int index) {
 }
 
 /* Delete Entry File Function */
-void deleteEntryFile() {
+void DeleteEntryFile() {
     //fseek
     
     /*
-    OBS.: User must insert the ID or....?
-    1 - How seek for the rigth index?
-    2 - Make id another element in the struct?
-    3 - Get the id, fseek moves by the id value and blablabla...
-    4 - i'll blow my fucking head off... swear on me mum
-    */
+     OBS.: User must insert the ID or....?
+     1 - How seek for the rigth index?
+     2 - Make id another element in the struct?
+     3 - Get the id, fseek moves by the id value and blablabla...
+     4 - i'll blow my fucking head off... swear on me mum
+     */
     
     /*
      1 - For the right index:
@@ -95,13 +100,47 @@ void EntryEdit(int index) {
     struct filme *f = {0};
     f = &(entryEdit->p[index - 1]);
     
+    int *idEdit = &f->entryId;
     char *nameEdit = f->nomeFilme;
     time_t *dateEdit = &f->dataLancamento;
     int *numEdit = &f->duracaoFilme;
     
+    ReadId(&f->entryId, idEdit);
     ReadText(f->nomeFilme, nameEdit);
     ReadDate(&f->dataLancamento, dateEdit);
     ReadNumber(&f->duracaoFilme, numEdit);
+}
+
+void ReadId(int *previousId, int *resultId) {
+    int validDigit = 0;
+    char userInput[5] = {0};
+    int isEmpty = 0;
+    
+    do {
+        
+        if (previousId) {
+            printf(BOLDBLACK "\nEdit Id[%d]: " RESET, *previousId);
+        } else {
+            printf(BOLDBLACK "\nRead Id:\n" RESET);
+            printf("-> ");
+        }
+        
+        fgets(userInput, sizeof(userInput), stdin);
+        fseek(stdin, 0, SEEK_END);
+        isEmpty = strcmp(userInput, "\n") == 0;
+        validDigit = atoi(userInput);
+        
+        if (previousId && isEmpty) {
+            break;
+        }
+        
+        if (validDigit) {
+            *resultId = validDigit;
+        } else {
+            printf(BOLDRED "Id inválido. Tente novamente.\n" RESET);
+        }
+        
+    } while (!validDigit);
 }
 
 /* ReadText and edit = ok */
@@ -236,6 +275,8 @@ void EntryConfirmation(struct filme newEntry) {
         ClearScreen();
         
         printf(BOLDRED "Confirmação de cadastro:\n" RESET);
+        printf(BOLDBLACK "\nId do filme: \n" RESET);
+        printf("%d\n", newEntry.entryId);
         printf(BOLDBLACK "\nNome do filme: \n" RESET);
         printf("%s\n\n", newEntry.nomeFilme);
         printf(BOLDBLACK "Data de Lançamento: \n" RESET);
@@ -252,7 +293,7 @@ void EntryConfirmation(struct filme newEntry) {
                 ClearScreen();
                 printf(BOLDRED "Filme salvo!\n" RESET);
                 AddFilme(newEntry);
-                saveEntryFile(newEntry);
+                SaveEntryFile(newEntry);
                 break;
                 
             case '2':
@@ -268,28 +309,32 @@ void EntryConfirmation(struct filme newEntry) {
 
 /* Entry List */
 void EntryList() {
-    /* Variables  */
-    struct Array *entries = GetFilmes();
-    time_t r;
-    struct tm dateStruct = {0};
-    char dateFinal[11] = {0}, dateInitial[11] = {0};
+    /* Variables */
+//    struct Array *entries = GetFilmes();
+//    time_t r;
+//    struct tm dateStruct = {0};
+//    char dateFinal[11] = {0}, dateInitial[11] = {0};
+//
+//    r = mktime(&dateStruct);
+//    strftime(dateInitial, sizeof(dateInitial), "%d/%m/%Y", &dateStruct);
     
-    r = mktime(&dateStruct);
-    strftime(dateInitial, sizeof(dateInitial), "%d/%m/%Y", &dateStruct);
+    RetrieveEntryFile();
     
-    if(entries == NULL || entries->count == 0) {
-        printf(BOLDRED "\nLISTA VAZIA.\n" RESET);
-    } else {
-        for (int i = 0; i < entries->count; i++) {
-            strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
-//            retrieveEntryFile();
-            printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
-            printf(BOLDBLACK "Nome do filme: " RESET);
-            printf("%s\n", entries->p[i].nomeFilme);
-            printf(BOLDBLACK "Data de lançamento: " RESET);
-            printf("%s\n", dateFinal);
-            printf(BOLDBLACK "Duração do filme: " RESET);
-            printf("%d min\n", entries->p[i].duracaoFilme);
-        }
-    }
+//    if(entries == NULL || entries->count == 0) {
+//        printf(BOLDRED "\nLISTA VAZIA.\n" RESET);
+//    } else {
+//        for (int i = 0; i < entries->count; i++) {
+//            strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
+//
+//            //            printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
+//            printf(BOLDBLACK "\nId do Filme: " RESET);
+//            printf("%d\n", entries->p[i].entryId);
+//            printf(BOLDBLACK "Nome do filme: " RESET);
+//            printf("%s\n", entries->p[i].nomeFilme);
+//            printf(BOLDBLACK "Data de lançamento: " RESET);
+//            printf("%s\n", dateFinal);
+//            printf(BOLDBLACK "Duração do filme: " RESET);
+//            printf("%d min\n", entries->p[i].duracaoFilme);
+//        }
+//    }
 }

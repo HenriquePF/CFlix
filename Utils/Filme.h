@@ -17,6 +17,7 @@ struct Array {
 };
 
 struct filme {
+    int entryId;
     char nomeFilme[NOME]; // 200 bits
     time_t dataLancamento; // long 64 bits
     int duracaoFilme; // int 32
