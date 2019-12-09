@@ -25,7 +25,7 @@ void EntryList(void);
 /* File Functions */
 void SaveEntryFile(struct filme newEntry);
 void RetrieveEntryFile(void);
-void EditBackUpFile(struct Array removeEntry, int index);
-void DeleteEntryFile(void);
+void EditBackUpFile(int index);
+void DeleteEntryFile(int index);
 /* -------------------------------------------------------------- */
 #endif

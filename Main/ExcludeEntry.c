@@ -20,7 +20,7 @@ void ExcludeEntry() {
     
     printf(BOLDBLACK "***** Excluir filme - CFLIX *****\n" RESET);
     
-    EntryList();
+//    EntryList();
     
     if(entries == NULL || entries->count == 0) {
         

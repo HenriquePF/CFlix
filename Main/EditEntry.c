@@ -62,9 +62,9 @@ void EditEntry() {
                     scanf("%d", &index);
                     fseek(stdin, 0, SEEK_END);
                     
-                    EntryList();
+//                    EntryList();
                     EntryEdit(index);
-
+                    
                     break;
                     
                 case '2':
