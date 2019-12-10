@@ -219,7 +219,7 @@ void EntryConfirmation(struct filme newEntry) {
             case '1':
                 ClearScreen();
                 printf(BOLDRED "Filme salvo!\n" RESET);
-                AddFilme(newEntry);
+                //                AddFilme(newEntry);
                 SaveEntryFile(newEntry);
                 break;
                 
@@ -273,7 +273,7 @@ void SaveEntryFile(struct filme newEntry) {
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
     
-    filePtr = fopen(filePath, "wb"); // ab for appending in binary
+    filePtr = fopen(filePath, "ab"); // ab for appending in binary
     
     fwrite(&newEntry, sizeof(struct filme), 1, filePtr);
     fclose(filePtr);
@@ -302,18 +302,177 @@ void RetrieveEntryFile() {
     fclose(filePtr);
 }
 
-/* Edit Entry File Function */
-void EditBackUpFile(int index) {
-    char dateRead[11] = {0};
-    
-    struct filme editBinValue = {0};
-    
+// FUNCTION FOR BINARY FILE - TEST & IMPROVE
+void EditIdBin() {
+    struct filme readEntry = {0};
+    int validDigit = 0;
+    char userInput[5] = {0};
+    int isEmpty = 0;
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "rb"); // ab for appending in binary
+    filePtr = fopen(filePath, "rb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
     
+    int localId = readEntry.entryId;
+    
+    do {
+        printf(BOLDBLACK "\nEdit Id[%d]: " RESET, localId);
+        
+        fgets(userInput, sizeof(userInput), stdin);
+        fseek(stdin, 0, SEEK_END);
+        isEmpty = strcmp(userInput, "\n") == 0;
+        validDigit = atoi(userInput);
+        
+        if (localId && isEmpty) {
+            break;
+        }
+        
+        if (validDigit) {
+            readEntry.entryId = validDigit;
+            fwrite(&readEntry, sizeof(int), 1, filePtr);
+        } else {
+            printf(BOLDRED "Id inválido. Tente novamente.\n" RESET);
+        }
+        
+    } while (!validDigit);
     
     fclose(filePtr);
+}
+
+// FUNCTION FOR BINARY FILE - TEST & IMPROVE
+void EditTextBin() {
+    char elementName[199] = {0}, *newString = 0;
+    int isEmpty = 0;
+    struct filme readEntry = {0};
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "rb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
+    char localText[200] = {0};
+    
+    strcpy(localText, readEntry.nomeFilme);
+    
+    do {
+  
+        printf(BOLDBLACK "\nEdit  Text [%s]: " RESET, localText);
+    
+        fgets(elementName, sizeof(elementName), stdin);
+        fseek(stdin, 0, SEEK_END);
+        isEmpty = strcmp(elementName, "\n") == 0;
+        
+        if (localText && isEmpty) {
+            break;
+        }
+        
+        newString = StringTrimmer(elementName);
+        
+        if (isEmpty && !localText) {
+            printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
+        }
+        
+        if (!isEmpty) {
+            strcpy(readEntry.nomeFilme, newString);
+        }
+        
+        free(newString);
+        newString = NULL;
+    } while (isEmpty);
+    
+    fclose(filePtr);
+}
+
+// FUNCTION FOR BINARY FILE - TEST & IMPROVE
+void EditDateBin() {
+    struct filme readEntry = {0};
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "rb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
+    char dateRead[11] = {0}, dateTemp[11] = {0};
+    int isEmpty = 0, isEqual = 0;
+    long localTime = readEntry.dataLancamento;
+    
+    
+    
+    do {
+        struct tm dataStruct = {0};
+        time_t r = 0;
+
+        strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", localtime(&localTime));
+        printf(BOLDBLACK "\nEdit Date[%s]: " RESET, dateTemp);
+        
+        fgets(dateTemp, 11, stdin);
+        isEmpty = strcmp(dateTemp, "\n") == 0;
+        fseek(stdin, 0, SEEK_END);
+        
+        if (isEmpty && localTime) {
+            break;
+        }
+        
+        strcpy(dateRead, dateTemp);
+        
+        strptime(dateTemp, "%d/%m/%Y", &dataStruct);
+        r = mktime(&dataStruct);
+        strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", &dataStruct);
+        isEqual = strcmp(dateTemp, dateRead) == 0;
+        
+        if ((isEmpty && !localTime) || (!isEqual && !localTime) || (!isEqual && localTime)) {
+            printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
+        }
+        
+        if (isEqual && !localTime) {
+            readEntry.dataLancamento = r;
+            break;
+        }
+        
+        if (isEqual && localTime) {
+            readEntry.dataLancamento = r;
+            break;
+        }
+        
+    } while (!isEqual);
+}
+
+// FUNCTION FOR BINARY FILE - TEST & IMPROVE
+void EditDurationBin() {
+    struct filme readEntry = {0};
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "rb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
+    int validDigit = 0;
+    char userInput[5] = {0};
+    int isEmpty = 0;
+    int localDuration = readEntry.duracaoFilme;
+
+    do {
+        printf(BOLDBLACK "\nEdit Number[%d]: " RESET, localDuration);
+ 
+        fgets(userInput, sizeof(userInput), stdin);
+        isEmpty = strcmp(userInput, "\n") == 0;
+        validDigit = atoi(userInput);
+        
+        if (localDuration && isEmpty) {
+            break;
+        }
+        
+        if (validDigit) {
+            readEntry.duracaoFilme = validDigit;
+        } else {
+            printf(BOLDRED "Número inválido. Tente novamente.\n" RESET);
+        }
+        
+    } while (!validDigit);
+}
+
+/* Edit Entry File Function */
+void EditBackUpFile(int index) { // THEN CHANGE THISSSSSSS
+    /*
+     EditIdBin, EditTextBin,EditDateBin and EditDurationBin...
+     EditBackUpFile(CHANGE NAME FFS!) will call these four other functions;
+     
+     These functions will not handle the index input, only the edition itsel;
+     EditBackUpFile will handle the index/errors;
+     
+     I hope i'm in the right track. :(
+     
+     */
 }
 
 /* Delete Entry File Function */
@@ -325,82 +484,4 @@ void DeleteEntryFile(int index) {
     
     fclose(filePtr);
 }
-
 /* ------------ BINARY FILE FUNCTIONS ------------ */
-void ReadIdBin() {
-    struct filme editBinValue = {0};
-    FILE *filePtr = 0;
-    char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "rb"); // ab for appending in binary
-    int isEmptyid = editBinValue.entryId == 0;
-    
-    int validDigit = 0;
-    char userInput[5] = {0};
-    
-    do {
-        
-        if (!isEmptyid) {
-            printf(BOLDBLACK "\nEdit Id[%d]: " RESET, editBinValue.entryId);
-        } else {
-            printf(BOLDBLACK "\nRead Id:\n" RESET);
-            printf("-> ");
-        }
-        
-        fgets(userInput, sizeof(userInput), stdin);
-        fseek(stdin, 0, SEEK_END);
-        isEmptyid = strcmp(userInput, "\n") == 0;
-        validDigit = atoi(userInput);
-        
-        if (editBinValue.entryId && isEmptyid) {
-            break;
-        }
-        
-        if (validDigit) {
-            fwrite(&editBinValue, sizeof(editBinValue.entryId), 1, filePtr);
-        } else {
-            printf(BOLDRED "Id inválido. Tente novamente.\n" RESET);
-        }
-        
-        fclose(filePtr);
-    } while (!validDigit);
-}
-
-void ReadTextBin() {
-    struct filme editBinValue = {0};
-    FILE *filePtr = 0;
-    char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "rb"); // ab for appending in binary
-    char elementName[199] = {0}, *newString = 0;
-    int isEmptyText = (editBinValue.nomeFilme) == NULL;
-    
-    do {
-        if (!isEmptyText) {
-            printf(BOLDBLACK "\nEdit  Text [%s]: " RESET, editBinValue.nomeFilme);
-        } else {
-            printf(BOLDBLACK "\nRead Text:\n" RESET);
-            printf("-> ");
-        }
-        
-        fgets(elementName, sizeof(elementName), stdin);
-        fseek(stdin, 0, SEEK_END);
-        isEmptyText = strcmp(elementName, "\n") == 0;
-        
-        if (fread(&editBinValue, sizeof(editBinValue.nomeFilme), 1, filePtr) && isEmptyText) {
-            break;
-        }
-        
-        newString = StringTrimmer(elementName);
-        
-        if (isEmptyText && !(fread(&editBinValue, sizeof(editBinValue.nomeFilme), 1, filePtr))) {
-            printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
-        }
-        
-        if (!isEmptyText) {
-            //            strcpy(resultText, newString);
-            fwrite(&editBinValue, sizeof(editBinValue.nomeFilme), 1, filePtr);
-        }
-        
-        free(newString);
-        newString = NULL;
-    } while (isEmptyText);
-}

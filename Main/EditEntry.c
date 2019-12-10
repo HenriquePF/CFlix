@@ -13,7 +13,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EditEntry() {
+void EditEntry() { // CHANGE ALL THIS FIRSTTTTTTT!
     
     ClearScreen();
     
@@ -24,8 +24,8 @@ void EditEntry() {
     
     printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
     
-    EntryList();
-    
+//    EntryList(); -- array
+    RetrieveEntryFile();
     if (movieEdit == NULL || movieEdit->count == 0) {
         
         do {
@@ -62,8 +62,8 @@ void EditEntry() {
                     scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
                     
-                    //                    EntryList();
-                    EntryEdit(id);
+//                    EntryEdit(id); -- array
+                    EditBackUpFile(id);
                     
                     break;
                     

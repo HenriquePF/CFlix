@@ -21,7 +21,7 @@ void EntryCatalog(void) {
     
     printf(BOLDBLACK "***** Catálogo - CFLIX *****\n" RESET);
     
-//    EntryList();
+    EntryList();
     RetrieveEntryFile();
     if(entry == NULL || entry->count == 0) {
         do {
