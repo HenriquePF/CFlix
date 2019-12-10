@@ -44,7 +44,7 @@ void EntryRegister(void) {
     /* Movie/Entry Confirmation Function */
     EntryConfirmation(newEntry);
     
-    /* Movie confirmation Function */
+    /* Entry Save Function to bin file */
     SaveEntryFile(newEntry);
     
     /* Menu */

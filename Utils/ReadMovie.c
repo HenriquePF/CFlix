@@ -36,6 +36,7 @@ void EntryEdit(int index) {
     ReadNumber(&f->duracaoFilme, numEdit);
 }
 
+/* ----------------- Array Functions ----------------- */
 /* ReadId and edit -- NO FILE!*/
 void ReadId(int *previousId, int *resultId) {
     int validDigit = 0;
@@ -236,42 +237,44 @@ void EntryConfirmation(struct filme newEntry) {
 /* Entry List -- File Function INSIDE */
 void EntryList() {
     /* Variables */
-        struct Array *entries = GetFilmes();
-        time_t r;
-        struct tm dateStruct = {0};
-        char dateFinal[11] = {0}, dateInitial[11] = {0};
+    struct Array *entries = GetFilmes();
+    time_t r;
+    struct tm dateStruct = {0};
+    char dateFinal[11] = {0}, dateInitial[11] = {0};
     
-        r = mktime(&dateStruct);
-        strftime(dateInitial, sizeof(dateInitial), "%d/%m/%Y", &dateStruct);
+    r = mktime(&dateStruct);
+    strftime(dateInitial, sizeof(dateInitial), "%d/%m/%Y", &dateStruct);
     
-//    RetrieveEntryFile();
+    //    RetrieveEntryFile();
     
-        if(entries == NULL || entries->count == 0) {
-            printf(BOLDRED "\nLISTA VAZIA.\n" RESET);
-        } else {
-            for (int i = 0; i < entries->count; i++) {
-                strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
-    
-                //            printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
-                printf(BOLDBLACK "\nId do Filme: " RESET);
-                printf("%d\n", entries->p[i].entryId);
-                printf(BOLDBLACK "Nome do filme: " RESET);
-                printf("%s\n", entries->p[i].nomeFilme);
-                printf(BOLDBLACK "Data de lançamento: " RESET);
-                printf("%s\n", dateFinal);
-                printf(BOLDBLACK "Duração do filme: " RESET);
-                printf("%d min\n", entries->p[i].duracaoFilme);
-            }
+    if(entries == NULL || entries->count == 0) {
+        printf(BOLDRED "\nLISTA VAZIA.\n" RESET);
+    } else {
+        for (int i = 0; i < entries->count; i++) {
+            strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
+            
+            //            printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
+            printf(BOLDBLACK "\nId do Filme: " RESET);
+            printf("%d\n", entries->p[i].entryId);
+            printf(BOLDBLACK "Nome do filme: " RESET);
+            printf("%s\n", entries->p[i].nomeFilme);
+            printf(BOLDBLACK "Data de lançamento: " RESET);
+            printf("%s\n", dateFinal);
+            printf(BOLDBLACK "Duração do filme: " RESET);
+            printf("%d min\n", entries->p[i].duracaoFilme);
         }
+    }
 }
+/* ----------------- Array Functions ----------------- */
 
 /* ------------ BINARY FILE FUNCTIONS ------------ */
-
 /* Save Entry File Function -- OK */
 void SaveEntryFile(struct filme newEntry) {
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
+    
     filePtr = fopen(filePath, "wb"); // ab for appending in binary
+    
     fwrite(&newEntry, sizeof(struct filme), 1, filePtr);
     fclose(filePtr);
 }
@@ -293,7 +296,7 @@ void RetrieveEntryFile() {
     while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
         dataStruct = localtime(&readEntry.dataLancamento);
         strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
-        printf("Id: %d \nNome: %s \nData(ItsFckd): %s \nDuração: %d\n\n", readEntry.entryId, readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
+        printf("Id: %d \nNome: %s \nData: %s \nDuração: %d\n\n", readEntry.entryId, readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
     }
     
     fclose(filePtr);
@@ -301,33 +304,103 @@ void RetrieveEntryFile() {
 
 /* Edit Entry File Function */
 void EditBackUpFile(int index) {
+    char dateRead[11] = {0};
+    
     struct filme editBinValue = {0};
+    
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb"); // ab for appending in binary
+    filePtr = fopen(filePath, "rb"); // ab for appending in binary
     
-    if (filePtr == NULL) {
-        printf(BOLDRED "Arquivo Inexistente.\n" RESET);
-    }
     
-    fseek(filePtr, (index - 1)*sizeof(struct filme), SEEK_SET);
-    fread(<#void *restrict __ptr#>, <#size_t __size#>, <#size_t __nitems#>, <#FILE *restrict __stream#>);
+    fclose(filePtr);
 }
 
 /* Delete Entry File Function */
 void DeleteEntryFile(int index) {
-    struct filme deleteEntry = {0};
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
     filePtr = fopen(filePath, "wb"); // ab for appending in binary
     
-    if (!filePtr) {
-        printf(BOLDRED "Arquivo inexistente.\n" RESET);
-    }
     
-    while (fread(&deleteEntry, sizeof(struct filme), 1, filePtr)) {
-        
-    }
+    fclose(filePtr);
 }
 
 /* ------------ BINARY FILE FUNCTIONS ------------ */
+void ReadIdBin() {
+    struct filme editBinValue = {0};
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "rb"); // ab for appending in binary
+    int isEmptyid = editBinValue.entryId == 0;
+    
+    int validDigit = 0;
+    char userInput[5] = {0};
+    
+    do {
+        
+        if (!isEmptyid) {
+            printf(BOLDBLACK "\nEdit Id[%d]: " RESET, editBinValue.entryId);
+        } else {
+            printf(BOLDBLACK "\nRead Id:\n" RESET);
+            printf("-> ");
+        }
+        
+        fgets(userInput, sizeof(userInput), stdin);
+        fseek(stdin, 0, SEEK_END);
+        isEmptyid = strcmp(userInput, "\n") == 0;
+        validDigit = atoi(userInput);
+        
+        if (editBinValue.entryId && isEmptyid) {
+            break;
+        }
+        
+        if (validDigit) {
+            fwrite(&editBinValue, sizeof(editBinValue.entryId), 1, filePtr);
+        } else {
+            printf(BOLDRED "Id inválido. Tente novamente.\n" RESET);
+        }
+        
+        fclose(filePtr);
+    } while (!validDigit);
+}
+
+void ReadTextBin() {
+    struct filme editBinValue = {0};
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "rb"); // ab for appending in binary
+    char elementName[199] = {0}, *newString = 0;
+    int isEmptyText = (editBinValue.nomeFilme) == NULL;
+    
+    do {
+        if (!isEmptyText) {
+            printf(BOLDBLACK "\nEdit  Text [%s]: " RESET, editBinValue.nomeFilme);
+        } else {
+            printf(BOLDBLACK "\nRead Text:\n" RESET);
+            printf("-> ");
+        }
+        
+        fgets(elementName, sizeof(elementName), stdin);
+        fseek(stdin, 0, SEEK_END);
+        isEmptyText = strcmp(elementName, "\n") == 0;
+        
+        if (fread(&editBinValue, sizeof(editBinValue.nomeFilme), 1, filePtr) && isEmptyText) {
+            break;
+        }
+        
+        newString = StringTrimmer(elementName);
+        
+        if (isEmptyText && !(fread(&editBinValue, sizeof(editBinValue.nomeFilme), 1, filePtr))) {
+            printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
+        }
+        
+        if (!isEmptyText) {
+            //            strcpy(resultText, newString);
+            fwrite(&editBinValue, sizeof(editBinValue.nomeFilme), 1, filePtr);
+        }
+        
+        free(newString);
+        newString = NULL;
+    } while (isEmptyText);
+}
