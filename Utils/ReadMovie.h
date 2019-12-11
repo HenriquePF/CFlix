@@ -25,7 +25,10 @@ void EntryList(void);
 /* File Functions */
 void SaveEntryFile(struct filme newEntry);
 void RetrieveEntryFile(void);
-void EditBackUpFile(int index);
+void EditBinData(int index);
 void DeleteEntryFile(int index);
+
+// TESTS
+void EditBinData(int index);
 /* -------------------------------------------------------------- */
 #endif

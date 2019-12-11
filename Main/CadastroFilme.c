@@ -44,9 +44,6 @@ void EntryRegister(void) {
     /* Movie/Entry Confirmation Function */
     EntryConfirmation(newEntry);
     
-    /* Entry Save Function to bin file */
-    SaveEntryFile(newEntry);
-    
     /* Menu */
     do{
         printf(BOLDBLACK "\n1 - Retornar:\n2 - Adicionar:\n" RESET);

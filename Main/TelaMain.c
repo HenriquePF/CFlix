@@ -18,10 +18,11 @@ int main(void) {
     
     char option = 0;
     
+    
     do {
         ClearScreen();
         printf(BOLDBLACK "***** CFLIX *****\n\n" RESET);
-        
+
         printf(BOLDBLACK "1) Listar catálogo.\n" RESET);
         printf(BOLDBLACK "2) Cadastrar filme.\n" RESET);
         printf(BOLDBLACK "3) Editar filme.\n" RESET);

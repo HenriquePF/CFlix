@@ -22,6 +22,12 @@ void EditEntry() { // CHANGE ALL THIS FIRSTTTTTTT!
     int id = 0;
     char option = 0;
     
+    printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
+    printf("-> ");
+    scanf("%d", &id);
+    fseek(stdin, 0, SEEK_END);
+    EditBinData(id);
+    
     printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
     
 //    EntryList(); -- array
@@ -63,7 +69,7 @@ void EditEntry() { // CHANGE ALL THIS FIRSTTTTTTT!
                     fseek(stdin, 0, SEEK_END);
                     
 //                    EntryEdit(id); -- array
-                    EditBackUpFile(id);
+                    EditBinData(id);
                     
                     break;
                     
