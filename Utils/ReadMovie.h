@@ -28,7 +28,7 @@ void RetrieveEntryFile(void);
 void EditBinData(int index);
 void DeleteEntryFile(int index);
 
-// TESTS
+// TESTS - Almost there...
 void EditBinData(int index);
 /* -------------------------------------------------------------- */
 #endif

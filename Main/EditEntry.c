@@ -13,7 +13,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EditEntry() { // CHANGE ALL THIS FIRSTTTTTTT!
+void EditEntry() { // GOTTA CHECK IF FILE ISNT EMPTY!!!!
     
     ClearScreen();
     
@@ -21,12 +21,6 @@ void EditEntry() { // CHANGE ALL THIS FIRSTTTTTTT!
     
     int id = 0;
     char option = 0;
-    
-    printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
-    printf("-> ");
-    scanf("%d", &id);
-    fseek(stdin, 0, SEEK_END);
-    EditBinData(id);
     
     printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
     

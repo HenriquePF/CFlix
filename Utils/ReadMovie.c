@@ -44,7 +44,6 @@ void ReadId(int *previousId, int *resultId) {
     int isEmpty = 0;
     
     do {
-        
         if (previousId) {
             printf(BOLDBLACK "\nEdit Id[%d]: " RESET, *previousId);
         } else {
@@ -68,6 +67,8 @@ void ReadId(int *previousId, int *resultId) {
         }
         
     } while (!validDigit);
+    
+    
 }
 
 /* ReadText and edit -- NO FILE!*/
@@ -302,342 +303,53 @@ void RetrieveEntryFile() {
     fclose(filePtr);
 }
 
-// FUNCTION FOR BINARY FILE - TEST & IMPROVE
-void EditIdBin() {
-    struct filme readEntry = {0};
-    int validDigit = 0;
-    char userInput[5] = {0};
-    int isEmpty = 0;
+/* Edit Entry File Function - FIX */
+void EditBinData(int index) {
     FILE *filePtr = 0;
-    char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
-    
-    int localId = readEntry.entryId;
-    
-    do {
-        printf(BOLDBLACK "\nEdit Id[%d]: " RESET, localId);
-        
-        fgets(userInput, sizeof(userInput), stdin);
-        fseek(stdin, 0, SEEK_END);
-        isEmpty = strcmp(userInput, "\n") == 0;
-        validDigit = atoi(userInput);
-        
-        if (localId && isEmpty) {
-            break;
-        }
-        
-        if (validDigit) {
-            readEntry.entryId = validDigit;
-            fwrite(&readEntry, sizeof(int), 1, filePtr);
-        } else {
-            printf(BOLDRED "Id inválido. Tente novamente.\n" RESET);
-        }
-        
-    } while (!validDigit);
-    
-    fclose(filePtr);
-}
-
-// FUNCTION FOR BINARY FILE - TEST & IMPROVE
-void EditTextBin() {
-    char elementName[199] = {0}, *newString = 0;
-    int isEmptyTxt = 0;
-    struct filme readEntry = {0};
-    FILE *filePtr = 0;
-    char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
-    char *localText[200] = {0};
-    
-    strcpy(*localText, readEntry.nomeFilme);
-    
-    do {
-        
-        printf(BOLDBLACK "\nEdit  Text [%s]: " RESET, *localText);
-        
-        fgets(elementName, sizeof(elementName), stdin);
-        fseek(stdin, 0, SEEK_END);
-        isEmptyTxt = strcmp(elementName, "\n") == 0;
-        
-        if (*readEntry.nomeFilme && isEmptyTxt) {
-            break;
-        }
-        
-        newString = StringTrimmer(elementName);
-        
-        if (isEmptyTxt && !(*readEntry.nomeFilme)) {
-            printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
-        }
-        
-        if (!isEmptyTxt) {
-            strcpy(readEntry.nomeFilme, newString);
-        }
-        
-        free(newString);
-        newString = NULL;
-    } while (isEmptyTxt);
-    
-    fclose(filePtr);
-}
-
-// FUNCTION FOR BINARY FILE - TEST & IMPROVE
-void EditDateBin() {
-    struct filme readEntry = {0};
-    FILE *filePtr = 0;
-    char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
-    char dateRead[11] = {0}, dateTemp[11] = {0};
-    int isEmpty = 0, isEqual = 0;
-    long localTime = readEntry.dataLancamento;
-    
-    
-    
-    do {
-        struct tm dataStruct = {0};
-        time_t r = 0;
-        
-        strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", localtime(&localTime));
-        printf(BOLDBLACK "\nEdit Date[%s]: " RESET, dateTemp);
-        
-        fgets(dateTemp, 11, stdin);
-        isEmpty = strcmp(dateTemp, "\n") == 0;
-        fseek(stdin, 0, SEEK_END);
-        
-        if (isEmpty && localTime) {
-            break;
-        }
-        
-        strcpy(dateRead, dateTemp);
-        
-        strptime(dateTemp, "%d/%m/%Y", &dataStruct);
-        r = mktime(&dataStruct);
-        strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", &dataStruct);
-        isEqual = strcmp(dateTemp, dateRead) == 0;
-        
-        if ((isEmpty && !localTime) || (!isEqual && !localTime) || (!isEqual && localTime)) {
-            printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
-        }
-        
-        if (isEqual && !localTime) {
-            readEntry.dataLancamento = r;
-            break;
-        }
-        
-        if (isEqual && localTime) {
-            readEntry.dataLancamento = r;
-            break;
-        }
-        
-    } while (!isEqual);
-}
-
-// FUNCTION FOR BINARY FILE - TEST & IMPROVE
-void EditDurationBin() {
-    struct filme readEntry = {0};
-    FILE *filePtr = 0;
-    char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "rb"); // wb - open for writing in bin mode, shit gets overwritten, dawg.
-    int validDigit = 0;
-    char userInput[5] = {0};
-    int isEmpty = 0;
-    int localDuration = readEntry.duracaoFilme;
-    
-    do {
-        printf(BOLDBLACK "\nEdit Number[%d]: " RESET, localDuration);
-        
-        fgets(userInput, sizeof(userInput), stdin);
-        isEmpty = strcmp(userInput, "\n") == 0;
-        validDigit = atoi(userInput);
-        
-        if (localDuration && isEmpty) {
-            break;
-        }
-        
-        if (validDigit) {
-            readEntry.duracaoFilme = validDigit;
-        } else {
-            printf(BOLDRED "Número inválido. Tente novamente.\n" RESET);
-        }
-        
-    } while (!validDigit);
-}
-
-/* Edit Entry File Function */
-void EditBinData(int index) { // THEN CHANGE THISSSSSSS
-    FILE *filePtr = 0;
-    char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb+"); // wb+ - Opens for both reading and writing, if shit already exists, it gets overwritten, dawg! - This function will READ and EDIT(overwrite) entries.
     struct filme readEntry = {0};
     
-    /* ID Variables */
-    int validDigitId = 0;
-    char userInput[5] = {0};
-    int isEmptyId = 0;
-    /* ------------------ */
-    
-    /* Text Variables */
-    char elementName[199] = {0}, *newString = 0;
-    int isEmptyTxt = 0;
-    /* ------------------ */
-    
-    /* Date Variables */
-    char dateRead[11] = {0}, dateTemp[11] = {0};
-    int isEmpty = 0, isEqual = 0;
-    /* ------------------ */
-    
-    /* Duration Variables */
-    int validDigitDuration = 0;
-    char userInputDuration[5] = {0};
-    int isEmptyDuration = 0;
-    /* ------------------ */
-    
-    /* AFTER the function RetrieveEntryFile is called, hte user will have the option to edit an entry or not... */
-    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
-    /* fseek will set the user at the position of the wanted entry */
+    char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "wb+"); // wb+ - Opens for both reading and writing, if shit already exists, it gets overwritten, dawg!
     
     /* fread will read the searched entry and display binary data in the struct format */
     fread(&readEntry, sizeof(struct filme), 1, filePtr);
+    
+    /* fseek will set the user at the position of the wanted entry */
+    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
 
-    /* ID SECTION */
-    do {
-        if (readEntry.entryId) {
-            printf(BOLDBLACK "\nEdit Id[%d]: " RESET, readEntry.entryId);
-        } else {
-            printf(BOLDBLACK "\nRead Id:\n" RESET);
-            printf("-> ");
-        }
-        
-        fgets(userInput, sizeof(userInput), stdin);
-        fseek(stdin, 0, SEEK_END);
-        isEmptyId = strcmp(userInput, "\n") == 0;
-        validDigitId = atoi(userInput);
-        
-        if (readEntry.entryId && isEmpty) {
-            break;
-        }
-        
-        if (validDigitId) {
-//            *resultId = validDigit;
-        } else {
-            printf(BOLDRED "Id inválido. Tente novamente.\n" RESET);
-        }
-        
-    } while (!validDigitId);
+    ReadId(&readEntry.entryId, &readEntry.entryId);
+    ReadText(readEntry.nomeFilme, readEntry.nomeFilme);
+    ReadDate(&readEntry.dataLancamento, &readEntry.dataLancamento);
+    ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
     
-    /* TEXT SECTION */
-    do {
-        if (readEntry.nomeFilme) {
-            printf(BOLDBLACK "\nEdit  Text [%s]: " RESET, readEntry.nomeFilme);
-        } else {
-            printf(BOLDBLACK "\nRead Text:\n" RESET);
-            printf("-> ");
-        }
-        
-        fgets(elementName, sizeof(elementName), stdin);
-        fseek(stdin, 0, SEEK_END);
-        isEmptyTxt = strcmp(elementName, "\n") == 0;
-        
-        if (readEntry.nomeFilme && isEmptyTxt) {
-            break;
-        }
-        
-        newString = StringTrimmer(elementName);
-        
-        if (isEmptyTxt && !readEntry.nomeFilme) {
-            printf(BOLDRED "Nome inválido. Tente novamente.\n" RESET);
-        }
-        
-        if (!isEmptyTxt) {
-//            strcpy(resultText, newString);
-        }
-        
-        free(newString);
-        newString = NULL;
-    } while (isEmptyTxt);
-
-    /* DATE SECTION */
-    
-    do {
-        struct tm dataStruct = {0};
-        time_t r = 0;
-        
-        if (readEntry.dataLancamento) {
-            strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", localtime(readEntry.dataLancamento));
-            printf(BOLDBLACK "\nEdit Date[%s]: " RESET, dateTemp);
-        } else {
-            printf(BOLDBLACK "Read Date\n" RESET);
-            printf("-> ");
-        }
-        
-        fgets(dateTemp, 11, stdin);
-        isEmpty = strcmp(dateTemp, "\n") == 0;
-        fseek(stdin, 0, SEEK_END);
-        
-        if (isEmpty && readEntry.dataLancamento) {
-            break;
-        }
-        
-        strcpy(dateRead, dateTemp);
-        
-        strptime(dateTemp, "%d/%m/%Y", &dataStruct);
-        r = mktime(&dataStruct);
-        strftime(dateTemp, sizeof(dateTemp), "%d/%m/%Y", &dataStruct);
-        isEqual = strcmp(dateTemp, dateRead) == 0;
-        
-        if ((isEmpty && !readEntry.dataLancamento) || (!isEqual && !readEntry.dataLancamento) || (!isEqual && readEntry.dataLancamento)) {
-            printf(BOLDRED "Data inválida. Tente novamente.\n" RESET);
-        }
-        
-        if (isEqual && !readEntry.dataLancamento) {
-//            *resultDate = r;
-            break;
-        }
-        
-        if (isEqual && readEntry.dataLancamento) {
-//            *resultDate = r;
-            break;
-        }
-        
-    } while (!isEqual);
-    
-    /* DURATION SECTION */
-    
-    do {
-        
-        if (readEntry.duracaoFilme) {
-            printf(BOLDBLACK "\nEdit Number[%d]: " RESET, readEntry.duracaoFilme);
-        } else {
-            printf(BOLDBLACK "Read Number:\n" RESET);
-            printf("-> ");
-        }
-        
-        fgets(userInputDuration, sizeof(userInputDuration), stdin);
-        isEmptyDuration = strcmp(userInputDuration, "\n") == 0;
-        validDigitDuration = atoi(userInputDuration);
-        
-        if (readEntry.duracaoFilme && isEmptyDuration) {
-            break;
-        }
-        
-        if (validDigitDuration) {
-//            *resultNumbers = validDigit;
-        } else {
-            printf(BOLDRED "Número inválido. Tente novamente.\n" RESET);
-        }
-        
-    } while (!readEntry.duracaoFilme);
-    
-//    printf("NOME[%s]: \n", readEntry.nomeFilme);
-//    printf("Data[%ld]: \n", readEntry.dataLancamento);
-//    printf("DURACAO[%d]: \n", readEntry.duracaoFilme);
+    fwrite(&readEntry, sizeof(struct filme), 1, filePtr);
     
     fclose(filePtr);
 }
 
-/* Delete Entry File Function */
+/* Delete Entry File Function  - */
 void DeleteEntryFile(int index) {
     FILE *filePtr = 0;
+    struct filme readEntry = {0};
     char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb"); // ab for appending in binary
+    filePtr = fopen(filePath, "wb"); // Opens for writing in binary mode - yo, shit gets overwritten, dawg!
+    
+    RetrieveEntryFile();
+    
+    printf("Deseja deletar qual item?\n");
+    // gets the ID
+    
+    // seeks it
+    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET);
+    
+    // will read and after this, we can print it
+    fread(&readEntry, sizeof(struct filme), 1, filePtr);
+    
+    // Seeked entry gets printed...
+    printf("\nID: %d\n", readEntry.entryId);
+    printf("Nome: %s\n", readEntry.nomeFilme);
+    printf("Data: %ld\n", readEntry.dataLancamento);
+    printf("Duração: %d\n", readEntry.duracaoFilme);
     
     
     fclose(filePtr);
