@@ -24,8 +24,16 @@ void EditEntry() { // GOTTA CHECK IF FILE ISNT EMPTY!!!!
     
     printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
     
-//    EntryList(); -- array
+    //    EntryList(); -- array
     RetrieveEntryFile();
+    
+    printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
+    printf("-> ");
+    scanf("%d", &id);
+    fseek(stdin, 0, SEEK_END);
+
+    EditBinData(id);
+    
     if (movieEdit == NULL || movieEdit->count == 0) {
         
         do {
@@ -62,8 +70,8 @@ void EditEntry() { // GOTTA CHECK IF FILE ISNT EMPTY!!!!
                     scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
                     
-//                    EntryEdit(id); -- array
-                    EditBinData(id);
+                    //                    EntryEdit(id); -- array
+//                    EditBinData(id);
                     
                     break;
                     

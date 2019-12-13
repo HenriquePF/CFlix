@@ -309,7 +309,7 @@ void EditBinData(int index) {
     struct filme readEntry = {0};
     
     char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb+"); // wb+ - Opens for both reading and writing, if shit already exists, it gets overwritten, dawg!
+    filePtr = fopen(filePath, "rb+");
     
     /* fread will read the searched entry and display binary data in the struct format */
     fread(&readEntry, sizeof(struct filme), 1, filePtr);
@@ -351,6 +351,8 @@ void DeleteEntryFile(int index) {
     printf("Data: %ld\n", readEntry.dataLancamento);
     printf("Duração: %d\n", readEntry.duracaoFilme);
     
+    // Move everything else to another file?
+    // Flag the
     
     fclose(filePtr);
 }

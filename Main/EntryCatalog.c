@@ -13,60 +13,53 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EntryCatalog(void) {
+void EntryCatalog(void) { // So far so good...
     ClearScreen();
     
-    char option = 0;
-    struct Array *entry = GetFilmes();
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
+    
+    filePtr = fopen(filePath, "ab");
     
     printf(BOLDBLACK "***** Catálogo - CFLIX *****\n" RESET);
     
-    EntryList();
-    RetrieveEntryFile();
-    if(entry == NULL || entry->count == 0) {
+    char option = 0;
+    unsigned long sz = 0;
+    
+    if (!filePtr) {
+        printf(BOLDRED "\nArquivo inexistente.\n" RESET);
+    
+        fseek(filePtr, 0L, SEEK_END);
+        sz = ftell(filePtr);
+    }
+    
+    if (sz != 0) {
+        RetrieveEntryFile();
+    }
+    
+    if (sz == 0) {
+        printf(BOLDRED "\nArquivo vazio.\n" RESET);
+        rewind(filePtr);
+        
         do {
-            printf( BOLDBLACK"\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
+            printf(BOLDBLACK "\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
             printf("-> ");
             scanf("%c", &option);
             fseek(stdin, 0, SEEK_END);
             
             switch (option) {
+                    
                 case '1':
                     break;
                     
                 case '2':
                     return EntryRegister();
-                    break;
                     
                 default:
-                    printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
+                    printf(BOLDRED "\nOpção inválida. Tente novamente.\n" RESET);
                     break;
             }
-        } while (option != '1');
-        
-    } else {
-        
-        do {
-            printf( BOLDBLACK"\n1 - Retornar:\n2 - Editar\n3 - Deletar\n" RESET);
-            printf("-> ");
-            scanf("%c", &option);
-            fseek(stdin, 0, SEEK_END);
             
-            switch (option) {
-                case '1':
-                    ClearScreen();
-                    break;
-                    
-                case '2':
-                    return EditEntry();
-                    
-                case '3':
-                    return ExcludeEntry();
-                    
-                default:
-                    printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
-                    break;
-            }
         } while (option != '1');
     }
 }
