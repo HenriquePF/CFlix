@@ -6,18 +6,15 @@
 #include "TrimFunc.h"
 #include "TrimFunc.h"
 #include "ctype.h"
+#include <sys/mman.h>
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
 #define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-/* --------------- XXX --------------- */
-
-// CHANGE FUNCTION NAMES --- OR BETTER COMMENTS;
-// FINISH THE EDIT / DELETE FUNCTION;
-
-/* ENTRY Edit Function -- NO FILE! */
+/* ----------------- Array Functions ----------------- */
+/* ENTRY Edit Function -- ARRAY FUNCTION! -- NOT USED! */
 void EntryEdit(int index) {
     
     /* Variables */
@@ -36,8 +33,7 @@ void EntryEdit(int index) {
     ReadNumber(&f->duracaoFilme, numEdit);
 }
 
-/* ----------------- Array Functions ----------------- */
-/* ReadId and edit -- NO FILE!*/
+/* ReadId and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadId(int *previousId, int *resultId) {
     int validDigit = 0;
     char userInput[5] = {0};
@@ -67,11 +63,9 @@ void ReadId(int *previousId, int *resultId) {
         }
         
     } while (!validDigit);
-    
-    
 }
 
-/* ReadText and edit -- NO FILE!*/
+/* ReadText and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadText(char *previousText, char *resultText) {
     char elementName[199] = {0}, *newString = 0;
     int isEmpty = 0;
@@ -107,7 +101,7 @@ void ReadText(char *previousText, char *resultText) {
     } while (isEmpty);
 }
 
-/* ReadDate and edit -- NO FILE!*/
+/* ReadDate and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadDate(time_t *previousDate, time_t *resultDate) {
     char dateRead[11] = {0}, dateTemp[11] = {0};
     int isEmpty = 0, isEqual = 0;
@@ -156,7 +150,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
     } while (!isEqual);
 }
 
-/* ReadNumber and edit -- NO FILE!*/
+/* ReadNumber and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadNumber(int *previousNumber, int *resultNumbers) {
     int validDigit = 0;
     char userInputDuration[5] = {0};
@@ -188,7 +182,7 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
     } while (!validDigit);
 }
 
-/* Entry Confirmation -- NO FILES! */
+/* Entry Confirmation -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void EntryConfirmation(struct filme newEntry) {
     time_t r;
     struct tm dateStruct = {0};
@@ -235,7 +229,7 @@ void EntryConfirmation(struct filme newEntry) {
     } while (confirm != '1' && confirm != '2');
 }
 
-/* Entry List -- File Function INSIDE */
+/* Entry List -- File Function INSIDE -- NOT USED! */
 void EntryList() {
     /* Variables */
     struct Array *entries = GetFilmes();
@@ -274,7 +268,7 @@ void SaveEntryFile(struct filme newEntry) {
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
     
-    filePtr = fopen(filePath, "ab"); // ab for appending in binary - This function will only append
+    filePtr = fopen(filePath, "ab"); // ab for appending in binary - This function will only append, dawg!
     
     fwrite(&newEntry, sizeof(struct filme), 1, filePtr);
     fclose(filePtr);
@@ -288,7 +282,7 @@ void RetrieveEntryFile() {
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
     
-    filePtr = fopen(filePath, "rb"); // rb opens for reading in binary mode, dawg. - This function will only read!
+    filePtr = fopen(filePath, "rb"); // rb opens for reading in binary mode, dawg.
     
     if (!filePtr) {
         printf(BOLDRED "Arquivo inexistente.\n" RESET);
@@ -299,11 +293,10 @@ void RetrieveEntryFile() {
         strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
         printf("Id: %d \nNome: %s \nData: %s \nDuração: %d\n\n", readEntry.entryId, readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
     }
-    
     fclose(filePtr);
 }
 
-/* Edit Entry File Function - FIX */
+/* Edit Entry File Function - OK...? */
 void EditBinData(int index) {
     FILE *filePtr = 0;
     struct filme readEntry = {0};
@@ -311,49 +304,66 @@ void EditBinData(int index) {
     char *filePath = "./EntryBackup.bin";
     filePtr = fopen(filePath, "rb+");
     
+    /* fseek will set the user at the position of the wanted entry */
+    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
+    
     /* fread will read the searched entry and display binary data in the struct format */
     fread(&readEntry, sizeof(struct filme), 1, filePtr);
     
-    /* fseek will set the user at the position of the wanted entry */
-    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
-
     ReadId(&readEntry.entryId, &readEntry.entryId);
     ReadText(readEntry.nomeFilme, readEntry.nomeFilme);
     ReadDate(&readEntry.dataLancamento, &readEntry.dataLancamento);
     ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
     
+    /* fseek back one element so fwrite and bet at the right spot */
+    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET);
+    
+    /* fwrite the new element in the right spot */
     fwrite(&readEntry, sizeof(struct filme), 1, filePtr);
     
     fclose(filePtr);
 }
 
-/* Delete Entry File Function  - */
+/* Delete Entry File Function - LAST ONE */
 void DeleteEntryFile(int index) {
+    FILE *filePtr = 0; /* For Reading */
+    FILE *filePtrTemp = 0; /* For Writing */
+    int found = 0;
+    struct filme readEntry = {0};
+    char *filePath = "./EntryBackup.bin";
+    char *filePathTemp = "./EntryBackupTemp.bin";
+    
+    filePtr = fopen(filePath, "rb");
+    filePtrTemp = fopen(filePathTemp, "wb");
+    
+    while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
+        if (index == readEntry.entryId) {
+            printf("Entrada deletada.\n");
+            found = 1;
+        } else {
+            fwrite(&readEntry, sizeof(struct filme), 1, filePtrTemp);
+        }
+    }
+
+    fclose(filePtr);
+    fclose(filePtrTemp);
+    remove("EntryBackup.bin");
+    rename("EntryBackupTemp", "EntryBackup.bin");
+}
+/* ------------ BINARY FILE FUNCTIONS ------------ */
+
+/* Testing stuff */
+void SearchEntry(int index) { // OK!
     FILE *filePtr = 0;
     struct filme readEntry = {0};
     char *filePath = "./EntryBackup.bin";
-    filePtr = fopen(filePath, "wb"); // Opens for writing in binary mode - yo, shit gets overwritten, dawg!
+    filePtr = fopen(filePath, "rb");
     
-    RetrieveEntryFile();
-    
-    printf("Deseja deletar qual item?\n");
-    // gets the ID
-    
-    // seeks it
     fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET);
     
-    // will read and after this, we can print it
     fread(&readEntry, sizeof(struct filme), 1, filePtr);
     
-    // Seeked entry gets printed...
-    printf("\nID: %d\n", readEntry.entryId);
-    printf("Nome: %s\n", readEntry.nomeFilme);
-    printf("Data: %ld\n", readEntry.dataLancamento);
-    printf("Duração: %d\n", readEntry.duracaoFilme);
-    
-    // Move everything else to another file?
-    // Flag the
+    printf("\nId: %d\nNome: %s\nData: %ld\nDuração: %d", readEntry.entryId, readEntry.nomeFilme, readEntry.dataLancamento, readEntry.duracaoFilme);
     
     fclose(filePtr);
 }
-/* ------------ BINARY FILE FUNCTIONS ------------ */

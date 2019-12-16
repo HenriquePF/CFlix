@@ -13,7 +13,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EntryCatalog(void) { // So far so good...
+void EntryCatalog(void) {
     ClearScreen();
     
     FILE *filePtr = 0;
@@ -25,17 +25,8 @@ void EntryCatalog(void) { // So far so good...
     
     char option = 0;
     unsigned long sz = 0;
-    
-    if (!filePtr) {
-        printf(BOLDRED "\nArquivo inexistente.\n" RESET);
-    
-        fseek(filePtr, 0L, SEEK_END);
-        sz = ftell(filePtr);
-    }
-    
-    if (sz != 0) {
-        RetrieveEntryFile();
-    }
+
+    RetrieveEntryFile(); // Check it IS or IS NOT empty....
     
     if (sz == 0) {
         printf(BOLDRED "\nArquivo vazio.\n" RESET);

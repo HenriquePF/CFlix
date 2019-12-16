@@ -27,8 +27,7 @@ void SaveEntryFile(struct filme newEntry);
 void RetrieveEntryFile(void);
 void EditBinData(int index);
 void DeleteEntryFile(int index);
-
-// TESTS - Almost there...
-void EditBinData(int index);
 /* -------------------------------------------------------------- */
+void SearchEntry(int index);
+
 #endif

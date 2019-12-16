@@ -13,7 +13,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EditEntry() { // GOTTA CHECK IF FILE ISNT EMPTY!!!!
+void EditEntry() { // Check it IS or IS NOT empty....
     
     ClearScreen();
     
@@ -31,7 +31,6 @@ void EditEntry() { // GOTTA CHECK IF FILE ISNT EMPTY!!!!
     printf("-> ");
     scanf("%d", &id);
     fseek(stdin, 0, SEEK_END);
-
     EditBinData(id);
     
     if (movieEdit == NULL || movieEdit->count == 0) {
@@ -71,7 +70,7 @@ void EditEntry() { // GOTTA CHECK IF FILE ISNT EMPTY!!!!
                     fseek(stdin, 0, SEEK_END);
                     
                     //                    EntryEdit(id); -- array
-//                    EditBinData(id);
+                    //                    EditBinData(id);
                     
                     break;
                     

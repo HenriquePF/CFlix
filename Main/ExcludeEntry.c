@@ -4,18 +4,19 @@
 #include "TelaMain.h"
 #include "ClearScreen.h"
 #include "Filme.h"
+#include "ReadMovie.h"
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
 #define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void ExcludeEntry() {
+void ExcludeEntry() { // Check it IS or IS NOT empty....
     
     // Variables
     ClearScreen();
     char option = 0, deleteOption = 0;
-    int index = 0;
+    int id = 0;
     struct Array *entries = GetFilmes();
     
     printf(BOLDBLACK "***** Excluir filme - CFLIX *****\n" RESET);
@@ -58,10 +59,10 @@ void ExcludeEntry() {
                 case '1':
                     printf(BOLDBLACK "\nEntre com o ID para deletar o filme:\n" RESET);
                     printf("-> ");
-                    scanf("%d", &index);
+                    scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
                     
-                    DeleteFilme(entries, index - 1);
+                    DeleteFilme(entries, id - 1);
                     
                 case '2':
                     break;
