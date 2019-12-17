@@ -27,7 +27,7 @@ void EntryRegister(void) {
     
     char option = 0;
     
-    printf(BOLDBLACK "***** Cadastro de flmes - CFLIX *****\n" RESET);
+    printf(BOLDBLACK "***** Entry Register - CFLIX *****\n" RESET);
     
     /* Read Text Function */
     ReadId(NULL, id);
@@ -46,7 +46,7 @@ void EntryRegister(void) {
     
     /* Menu */
     do{
-        printf(BOLDBLACK "\n1 - Retornar:\n2 - Adicionar:\n" RESET);
+        printf(BOLDBLACK "\n1 - Return:\n2 - Register:\n" RESET);
         printf("-> ");
         scanf("%c", &option);
         fseek(stdin, 0, SEEK_END);
@@ -59,7 +59,7 @@ void EntryRegister(void) {
                 return EntryRegister();
                 
             default:
-                printf(BOLDRED "Entrada inválida. Tente novamente." RESET);
+                printf(BOLDRED "Invalid option. Try again." RESET);
                 break;
         }
     } while (option != '1');

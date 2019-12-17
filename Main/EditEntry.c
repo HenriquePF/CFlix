@@ -18,66 +18,44 @@ void EditEntry() { // Check it IS or IS NOT empty....
     ClearScreen();
     
     /* Variables */
-    struct Array *movieEdit = GetFilmes();
-    int id = 0;
+    FILE *filePtr = 0;
+    char *filePath = "./EntryBackup.bin";
     char option = 0;
+    int id = 0;
+    filePtr = fopen(filePath, "rb");
     
-    printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
+    printf(BOLDBLACK "***** Edit Entry - CFLIX *****\n" RESET);
     
-    RetrieveEntryFile();
-    
-    printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
-    printf("-> ");
-    scanf("%d", &id);
-    fseek(stdin, 0, SEEK_END);
-    
-    EditBinData(id);
-    
-    if (movieEdit == NULL || movieEdit->count == 0) {
+    if (IsEmptyFile(filePtr) == 1) {
+        printf(BOLDBLACK "\n1 - Return\n2 - Register\n" RESET);
+        printf("-> ");
+        scanf("%c", &option);
+        fseek(stdin, 0, SEEK_END);
         
         do {
-            printf(BOLDBLACK "\n1 - Retornar:\n" RESET);
-            printf("-> ");
-            scanf("%c", &option);
-            fseek(stdin, 0, SEEK_END);
             
             switch (option) {
                 case '1':
-                    ClearScreen();
                     break;
                     
+                case '2':
+                    return EntryRegister();
+                    
                 default:
-                    printf(BOLDRED "Entrada inválida. Tente novamente.\n" RESET);
                     break;
             }
             
         } while (option != '1');
-        
     } else {
         
-        do {
-            printf(BOLDRED "\nEditar um filme(1) ou Retornar(2):\n" RESET);
-            printf("-> ");
-            scanf("%c", &option);
-            fseek(stdin, 0, SEEK_END);
-            
-            switch (option) {
-                case '1':
-                    
-                    printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
-                    printf("-> ");
-                    scanf("%d", &id);
-                    fseek(stdin, 0, SEEK_END);
-                    
-                    break;
-                    
-                case '2':
-                    break;
-                    
-                default:
-                    printf(BOLDRED "Entrada inválida. Tente novamente." RESET);
-                    break;
-            }
-        } while (option != '2');
+        RetrieveEntryFile();
+    
+        printf(BOLDBLACK "\nEnter the entry's ID to edit:\n" RESET);
+        printf("-> ");
+        scanf("%d", &id);
+        fseek(stdin, 0, SEEK_END);
+    
+        EditBinData(id);
+        
     }
 }

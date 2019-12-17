@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include "Filme.h"
 
+/* Globals */
+//const char *g_filePath = "./EntryBackup.bin";
+//const char *g_filePathForRemove = "./EntryBackupTemp.bin";
+
 /* -------------------------------------------------------------- */
 // Generic Functions
 void ReadId(int *previousId, int *resultId);
@@ -23,6 +27,7 @@ void EntryList(void);
 /* -------------------------------------------------------------- */
 
 /* File Functions */
+int IsEmptyFile(FILE *filePtr);
 void SaveEntryFile(struct filme newEntry);
 void RetrieveEntryFile(void);
 void EditBinData(int index);

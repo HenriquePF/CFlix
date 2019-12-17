@@ -13,32 +13,28 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EntryCatalog(void) { // Check it IS or IS NOT empty....
+void EntryCatalog(void) {
     ClearScreen();
     
+    /* Variables */
     FILE *filePtr = 0;
     char *filePath = "./EntryBackup.bin";
+    filePtr = fopen(filePath, "rb");
     
-    filePtr = fopen(filePath, "ab");
-    
-    printf(BOLDBLACK "***** Catálogo - CFLIX *****\n" RESET);
+    printf(BOLDBLACK "***** Catalog - CFLIX *****\n" RESET);
     
     char option = 0;
-    unsigned long sz = 0;
-
-    RetrieveEntryFile();
     
-    if (sz == 0) {
+    if (IsEmptyFile(filePtr)) {
         
+        printf(BOLDBLACK "\n1 - Return\n2 - Register\n" RESET);
+        printf("-> ");
+        scanf("%c", &option);
+        fseek(stdin, 0, SEEK_END);
         
         do {
-            printf(BOLDBLACK "\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
-            printf("-> ");
-            scanf("%c", &option);
-            fseek(stdin, 0, SEEK_END);
             
             switch (option) {
-                    
                 case '1':
                     break;
                     
@@ -46,10 +42,36 @@ void EntryCatalog(void) { // Check it IS or IS NOT empty....
                     return EntryRegister();
                     
                 default:
-                    printf(BOLDRED "\nOpção inválida. Tente novamente.\n" RESET);
                     break;
             }
             
+        } while (option != '1');
+        
+    } else {
+        
+        RetrieveEntryFile();
+        
+        do {
+            
+            printf(BOLDBLACK "\n1 - Return\n2 - Remove\n3 - Edit\n" RESET);
+            printf("-> ");
+            scanf("%c", &option);
+            fseek(stdin, 0, SEEK_END);
+            
+            switch (option) {
+                case '1':
+                    break;
+                    
+                case '2':
+                    return ExcludeEntry();
+                    
+                case '3':
+                    EditEntry();
+                    
+                default:
+                    printf(BOLDRED "Invalid option. Try Again.\n" RESET);
+                    break;
+            }
         } while (option != '1');
     }
 }

@@ -15,10 +15,16 @@
 #define RESET       "\033[0m"              /* RESET */
 
 int main(void) {
-    
+/*
+ TODO:
+ 1 - Re-rhink names given!
+ 2 - MovieIndexById!
+ 3 - Put everything else in English
+ 4 - ????
+ 
+ */
     char option = 0;
-    
-    
+
     do {
         ClearScreen();
         printf(BOLDBLACK "***** CFLIX *****\n\n" RESET);
