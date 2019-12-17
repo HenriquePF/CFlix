@@ -338,7 +338,7 @@ void DeleteEntryFile(int index) {
     
     while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
         if (index == readEntry.entryId) {
-            printf("Entrada deletada.\n");
+            printf(BOLDRED "Entrada deletada.\n" RESET);
             found = 1;
         } else {
             fwrite(&readEntry, sizeof(struct filme), 1, filePtrTemp);
@@ -348,7 +348,7 @@ void DeleteEntryFile(int index) {
     fclose(filePtr);
     fclose(filePtrTemp);
     remove("EntryBackup.bin");
-    rename("EntryBackupTemp", "EntryBackup.bin");
+    rename("EntryBackupTemp.bin", "EntryBackup.bin");
 }
 /* ------------ BINARY FILE FUNCTIONS ------------ */
 

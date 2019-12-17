@@ -17,20 +17,20 @@ void EditEntry() { // Check it IS or IS NOT empty....
     
     ClearScreen();
     
+    /* Variables */
     struct Array *movieEdit = GetFilmes();
-    
     int id = 0;
     char option = 0;
     
     printf(BOLDBLACK "***** Editar cadastro de filme - CFLIX *****\n" RESET);
     
-    //    EntryList(); -- array
     RetrieveEntryFile();
     
     printf(BOLDBLACK "\nEntre com o ID do filme para editar:\n" RESET);
     printf("-> ");
     scanf("%d", &id);
     fseek(stdin, 0, SEEK_END);
+    
     EditBinData(id);
     
     if (movieEdit == NULL || movieEdit->count == 0) {
@@ -68,9 +68,6 @@ void EditEntry() { // Check it IS or IS NOT empty....
                     printf("-> ");
                     scanf("%d", &id);
                     fseek(stdin, 0, SEEK_END);
-                    
-                    //                    EntryEdit(id); -- array
-                    //                    EditBinData(id);
                     
                     break;
                     

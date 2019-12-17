@@ -13,7 +13,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EntryCatalog(void) {
+void EntryCatalog(void) { // Check it IS or IS NOT empty....
     ClearScreen();
     
     FILE *filePtr = 0;
@@ -26,11 +26,10 @@ void EntryCatalog(void) {
     char option = 0;
     unsigned long sz = 0;
 
-    RetrieveEntryFile(); // Check it IS or IS NOT empty....
+    RetrieveEntryFile();
     
     if (sz == 0) {
-        printf(BOLDRED "\nArquivo vazio.\n" RESET);
-        rewind(filePtr);
+        
         
         do {
             printf(BOLDBLACK "\n1 - Retornar:\n2 - Cadastrar:\n" RESET);
