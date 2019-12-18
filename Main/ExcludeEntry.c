@@ -13,17 +13,20 @@
 
 void ExcludeEntry() {
     
-    // Variables
     ClearScreen();
-    FILE *filePtr = 0; /* For Reading */
-    char *filePath = "./EntryBackup.bin"; /* Current file containing the entries */
-    filePtr = fopen(filePath, "rb"); /* Main file will get read - if file doesn't exist, returns NULL */
-
+    
+    // Variables
     int id = 0;
     char option = 0;
+    FILE *getFile = 0;
+    
     printf(BOLDBLACK "***** Remove Entry - CFLIX *****\n" RESET);
     
-    if (IsEmptyFile(filePtr)) {
+    getFile = OpenFileBinaryMode();
+    if (IsEmptyFile(getFile) == 2) {
+        printf(BOLDRED "\nFile is empty.\n" RESET);
+        CloseFileBinaryMode(getFile);
+        
         do {
             printf(BOLDBLACK "\n1 - Return\n2 - Register\n" RESET);
             printf("-> ");
@@ -41,8 +44,32 @@ void ExcludeEntry() {
                     break;
             }
         } while (option != '1');
-    } else {
-        RetrieveEntryFile();
+    } else if (IsEmptyFile(getFile) == 1) {
+        printf(BOLDRED "\nFile does not exist.\nA file will be created if you register an entry.\n" RESET);
+        
+        printf(BOLDBLACK "\n1 - Return\n2 - Register\n" RESET);
+        printf("-> ");
+        scanf("%c", &option);
+        fseek(stdin, 0, SEEK_END);
+        
+        do {
+            
+            switch (option) {
+                case '1':
+                    break;
+                    
+                case '2':
+                    return EntryRegister();
+                    
+                default:
+                    break;
+            }
+            
+        } while (option != '1');
+        
+    }else {
+        
+        GetEntriesFromFile();
         
         printf(BOLDBLACK "\nEnter the ID to remove the entry:\n" RESET);
         printf("-> ");

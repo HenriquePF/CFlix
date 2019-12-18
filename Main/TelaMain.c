@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "EntryCatalog.h"
-#include "CadastroFilme.h"
+#include "EntryRegister.h"
 #include "EditEntry.h"
 #include "ExcludeEntry.h"
 #include "ClearScreen.h"
@@ -15,20 +15,13 @@
 #define RESET       "\033[0m"              /* RESET */
 
 int main(void) {
-/*
- TODO:
- 1 - Re-rhink names given!
- 2 - MovieIndexById!
- 3 - Put everything else in English
- 4 - ????
- 
- */
+    
     char option = 0;
-
+    
     do {
         ClearScreen();
         printf(BOLDBLACK "***** CFLIX *****\n\n" RESET);
-
+        
         printf(BOLDBLACK "1) Listar catálogo.\n" RESET);
         printf(BOLDBLACK "2) Cadastrar filme.\n" RESET);
         printf(BOLDBLACK "3) Editar filme.\n" RESET);

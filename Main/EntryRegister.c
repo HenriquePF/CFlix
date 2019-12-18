@@ -19,7 +19,7 @@ void EntryRegister(void) {
     
     /*  Variables */
     struct filme newEntry = {0};
-
+    
     int *id = &newEntry.entryId;
     char *name = newEntry.nomeFilme;
     time_t *date = &newEntry.dataLancamento;
@@ -34,10 +34,10 @@ void EntryRegister(void) {
     
     /* Read Text Function */
     ReadText(NULL, name);
-
+    
     /* Read Date Function */
     ReadDate(NULL, date);
-
+    
     /* Read Number Function */
     ReadNumber(NULL, num);
     

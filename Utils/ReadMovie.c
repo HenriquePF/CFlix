@@ -13,8 +13,8 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-const char *g_filePath = "./EntryBackup.bin";
-const char *g_filePathForRemove = "./EntryBackupTemp.bin";
+const char *g_filePath = "./CFlixRecords.bin";
+const char *g_filePathForRemove = "./CFlixRecordsTemp.bin";
 
 /* ----------------- Array Functions ----------------- */
 /* ENTRY Edit Function -- ARRAY FUNCTION! -- NOT USED! */
@@ -217,7 +217,7 @@ void EntryConfirmation(struct filme newEntry) {
             case '1':
                 ClearScreen();
                 printf(BOLDRED "Entry saved!\n" RESET);
-                //                AddFilme(newEntry);
+                
                 SaveEntryFile(newEntry);
                 break;
                 
@@ -243,7 +243,6 @@ void EntryList() {
     r = mktime(&dateStruct);
     strftime(dateInitial, sizeof(dateInitial), "%d/%m/%Y", &dateStruct);
     
-    //    RetrieveEntryFile();
     
     if(entries == NULL || entries->count == 0) {
         printf(BOLDRED "\nLISTA VAZIA.\n" RESET);
@@ -251,7 +250,6 @@ void EntryList() {
         for (int i = 0; i < entries->count; i++) {
             strftime(dateFinal, sizeof(dateFinal), "%d/%m/%Y", localtime(&entries->p[i].dataLancamento));
             
-            //            printf(BOLDRED "\nID: %d)\n" RESET, i + 1);
             printf(BOLDBLACK "\nId do Filme: " RESET);
             printf("%d\n", entries->p[i].entryId);
             printf(BOLDBLACK "Nome do filme: " RESET);
@@ -267,13 +265,26 @@ void EntryList() {
 
 /* ------------ BINARY FILE FUNCTIONS ------------ */
 
+/* Opens file in RB mode */
+FILE *OpenFileBinaryMode() {
+    FILE *filePtr = 0;
+    filePtr = fopen(g_filePath, "rb");
+    return filePtr;
+}
+
+/* Close ReadFileBinaryMode */
+void CloseFileBinaryMode(FILE *filePtr) {
+    fclose(filePtr);
+}
+
 /* Checks if file has content */
 int IsEmptyFile(FILE *filePtr) {
     struct filme entries = {0};
     
-    if (fread(&entries, sizeof(struct filme), 1, filePtr) == 0) {
-        printf(BOLDRED "\nEmpty file.\n" RESET);
+    if (filePtr == NULL) {
         return 1;
+    } else if (fread(&entries, sizeof(struct filme), 1, filePtr) == 0) {
+        return 2;
     }
     return 0;
 }
@@ -289,37 +300,36 @@ void SaveEntryFile(struct filme newEntry) {
 }
 
 /* Retrieve Entry Binary File Function -- OK */
-void RetrieveEntryFile() {
+void GetEntriesFromFile() {
     char dateRead[11] = {0};
     struct filme readEntry = {0};
     struct tm *dataStruct = {0};
     FILE *filePtr = 0;
     
     filePtr = fopen(g_filePath, "rb"); // rb opens for reading in binary mode, dawg.
-    
-    if (!filePtr) {
-        printf(BOLDRED "File does not exist.\n" RESET);
-    } else {
-        while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
-            dataStruct = localtime(&readEntry.dataLancamento);
-            strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
-            printf("Id: %d \nText: %s \nDate: %s \nNumber: %d\n\n", readEntry.entryId, readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
-        }
-        fclose(filePtr);
+
+    while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
+        dataStruct = localtime(&readEntry.dataLancamento);
+        strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
+        printf("\nId: %d \nText: %s \nDate: %s \nNumber: %d\n\n", readEntry.entryId, readEntry.nomeFilme, dateRead, readEntry.duracaoFilme);
     }
+    fclose(filePtr);
 }
 
 /*
- 
  * Returns entry index
  * Return -1 if not found
- 
  */
-int MovieIndexById(int id) {
-    /*
-     Some ideas...
-     
-     */
+int MovieIndexById(int entryId) {
+    FILE *filePtr = 0;
+    filePtr = fopen(g_filePath, "rb");
+    struct filme readEntry = {0};
+    
+    while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
+        if (entryId == readEntry.entryId) {
+            return readEntry.entryId;
+        }
+    }
     return -1;
 }
 
@@ -368,25 +378,10 @@ void DeleteEntryFile(int index) {
             fwrite(&readEntry, sizeof(struct filme), 1, filePtrTemp); /* everything else will be written in the new file */
         }
     }
-
+    
     fclose(filePtr); /* Close both files */
     fclose(filePtrTemp);
-    remove("EntryBackup.bin"); /* Main file gets removed - It contains all the entries */
-    rename("EntryBackupTemp.bin", "EntryBackup.bin"); /* New file gets the main file name */
+    remove("CFlixRecords.bin"); /* Main file gets removed - It contains all the entries */
+    rename("CFlixRecordsTemp.bin", "CFlixRecords.bin"); /* New file gets the main file name */
 }
 /* ------------ BINARY FILE FUNCTIONS ------------ */
-
-/* Testing stuff */
-void SearchEntry(int index) { // OK!
-    FILE *filePtr = 0;
-    struct filme readEntry = {0};
-    filePtr = fopen(g_filePath, "rb");
-    
-    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET);
-    
-    fread(&readEntry, sizeof(struct filme), 1, filePtr);
-    
-    printf("\nId: %d\nText: %s\nDate: %ld\nNumber: %d", readEntry.entryId, readEntry.nomeFilme, readEntry.dataLancamento, readEntry.duracaoFilme);
-    
-    fclose(filePtr);
-}

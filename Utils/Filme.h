@@ -3,7 +3,7 @@
 
 #include "TelaMain.h"
 #include "EntryCatalog.h"
-#include "CadastroFilme.h"
+#include "EntryRegister.h"
 #include "EditEntry.h"
 #include "ExcludeEntry.h"
 #include <time.h>
