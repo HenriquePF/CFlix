@@ -28,12 +28,12 @@ void EditEntry() { // Check it IS or IS NOT empty....
         printf(BOLDRED "\nFile is empty.\n" RESET);
         CloseFileBinaryMode(getFile);
         
-        printf(BOLDBLACK "\n1 - Return\n2 - Register\n" RESET);
-        printf("-> ");
-        scanf("%c", &option);
-        fseek(stdin, 0, SEEK_END);
-        
         do {
+            printf(BOLDBLACK "\n1 - Return\n2 - Register\n" RESET);
+            printf("-> ");
+            scanf("%c", &option);
+            fseek(stdin, 0, SEEK_END);
+            
             switch (option) {
                 case '1':
                     break;
@@ -79,33 +79,26 @@ void EditEntry() { // Check it IS or IS NOT empty....
         scanf("%d", &id);
         fseek(stdin, 0, SEEK_END);
         
-        if (MovieIndexById(id) == -1) {
-            do {
-                printf(BOLDRED "\nEntry not found!\n " RESET);
-                
-                printf(BOLDBLACK "\n1 - Return\n2 - Edit\n" RESET);
-                printf("-> ");
-                scanf("%c", &option);
-                fseek(stdin, 0, SEEK_END);
-                
-                
-                switch (option) {
-                    case '1':
-                        break;
-                        
-                    case '2':
-                        return EditEntry();
-                        
-                    default:
-                        printf(BOLDRED "Invalid input. Try Again.\n" RESET);
-                        break;
-                }
-            } while (option != '1');
+        EditBinData(id);
+        
+        do {
             
-        } else {
-            // TO COLOCANDO A PORRA ERRADA AQUI DENTRO!
-            EditBinData();
+            printf(BOLDBLACK "\n1 - Return\n2 - Edit\n" RESET);
+            printf("-> ");
+            scanf("%c", &option);
+            fseek(stdin, 0, SEEK_END);
             
-        }
+            switch (option) {
+                case '1':
+                    break;
+                    
+                case '2':
+                    return EditEntry();
+                    
+                default:
+                    printf(BOLDRED "Invalid input. Try Again.\n" RESET);
+                    break;
+            }
+        } while (option != '1');
     }
 }

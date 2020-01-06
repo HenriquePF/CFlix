@@ -75,7 +75,7 @@ void ReadText(char *previousText, char *resultText) {
     
     do {
         if (previousText) {
-            printf(BOLDBLACK "\nEdit  Text [%s]: " RESET, previousText);
+            printf(BOLDBLACK "\nEdit Text[%s]: " RESET, previousText);
         } else {
             printf(BOLDBLACK "\nRead Text:\n" RESET);
             printf("-> ");
@@ -307,7 +307,7 @@ void GetEntriesFromFile() {
     FILE *filePtr = 0;
     
     filePtr = fopen(g_filePath, "rb"); // rb opens for reading in binary mode, dawg.
-
+    
     while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
         dataStruct = localtime(&readEntry.dataLancamento);
         strftime(dateRead, sizeof(dateRead), "%d/%m/%Y", dataStruct);
@@ -321,45 +321,56 @@ void GetEntriesFromFile() {
  * Return -1 if not found
  */
 int MovieIndexById(int entryId) {
+    int entryIndex = 0;
     FILE *filePtr = 0;
     filePtr = fopen(g_filePath, "rb");
     struct filme readEntry = {0};
     
     while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
-        if (entryId == readEntry.entryId) {
+        if (entryIndex == entryId) {
             return readEntry.entryId;
         }
+        entryIndex++;
     }
     return -1;
 }
 
 /* Edit Entry File Function - OK...? */
 void EditBinData(int index) {
+    int newIndex = 0;
     FILE *filePtr = 0;
     struct filme readEntry = {0};
     filePtr = fopen(g_filePath, "rb+");
     
-    /* fseek will set the user at the position of the wanted entry */
-    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
+    newIndex = MovieIndexById(index);
     
-    /* fread will read the searched entry and display binary data in the struct format */
-    fread(&readEntry, sizeof(struct filme), 1, filePtr);
-    
-    ReadId(&readEntry.entryId, &readEntry.entryId);
-    ReadText(readEntry.nomeFilme, readEntry.nomeFilme);
-    ReadDate(&readEntry.dataLancamento, &readEntry.dataLancamento);
-    ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
-    
-    /* fseek back one element so fwrite is executed at the right spot */
-    fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET);
-    
-    /* fwrite the new element in the right spot */
-    fwrite(&readEntry, sizeof(struct filme), 1, filePtr);
+    if (newIndex == -1) {
+        printf(BOLDRED "\nEntry not found!\n" RESET);
+    } else {
+        
+        /* fseek will set the user at the position of the wanted entry */
+        fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
+        
+        /* fread will read the searched entry and display binary data in the struct format */
+        fread(&readEntry, sizeof(struct filme), 1, filePtr);
+        
+        ReadId(&readEntry.entryId, &readEntry.entryId);
+        ReadText(readEntry.nomeFilme, readEntry.nomeFilme);
+        ReadDate(&readEntry.dataLancamento, &readEntry.dataLancamento);
+        ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
+        
+        /* fseek back one element so fwrite is executed at the right spot */
+        fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET);
+        
+        /* fwrite the new element in the right spot */
+        fwrite(&readEntry, sizeof(struct filme), 1, filePtr);
+    }
     
     fclose(filePtr);
 }
 
 /* Delete Entry File Function - LAST ONE */
+// check if entry is valid or not...
 void DeleteEntryFile(int index) {
     FILE *filePtr = 0; /* For Reading */
     FILE *filePtrTemp = 0; /* For Writing */
