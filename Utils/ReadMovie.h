@@ -34,7 +34,7 @@ void CloseFileBinaryMode(FILE *filePtr);
 int IsEmptyFile(FILE *filePtr);
 void SaveEntryFile(struct filme newEntry);
 void GetEntriesFromFile(void);
-int MovieIndexById(int entryId);
+int FindEntryById(int entryId);
 void EditBinData(int index);
 void DeleteEntryFile(int index);
 /* File Functions */

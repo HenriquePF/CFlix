@@ -316,40 +316,34 @@ void GetEntriesFromFile() {
     fclose(filePtr);
 }
 
-/*
- * Returns entry index
- * Return -1 if not found
- */
-int MovieIndexById(int inputId) {
-    int entryIndex = 1;
+int FindEntryById(int inputId) {
+    int entryIndex = 1; // starts with 1
     FILE *filePtr = 0;
     filePtr = fopen(g_filePath, "rb");
     struct filme readEntry = {0};
     
-    while (1) {
-        fread(&readEntry, sizeof(struct filme), 1, filePtr);
-
-        // Input is compared to the first element, if matched, it returns it's index
+    while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
+        
+        // Input is compared with element, if matched, it returns it's index
         if (readEntry.entryId == inputId) {
             return entryIndex;
         }
-        
         entryIndex++;
     }
+    
     return -1;
 }
 
-/* Edit Entry File Function - OK...? */
 void EditBinData(int index) {
     int newIndex = 0;
     FILE *filePtr = 0;
     struct filme readEntry = {0};
     filePtr = fopen(g_filePath, "rb+");
     
-    newIndex = MovieIndexById(index);
+    newIndex = FindEntryById(index);
     
     if (newIndex != -1) {
-        /* fseek will set the pointer at the position of the entry PLUS one, which means we have to - 1 one position */
+        /* fseek will set the user at the position of the wanted entry */
         fseek(filePtr, (newIndex - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
         
         /* fread will read the searched entry and display binary data in the struct format */
