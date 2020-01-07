@@ -67,17 +67,38 @@ void ExcludeEntry() {
             
         } while (option != '1');
         
-    }else {
+    } else {
         
         GetEntriesFromFile();
         
         printf(BOLDBLACK "\nEnter the ID to remove the entry:\n" RESET);
-        printf("-> ");
+        printf(BOLDBLACK "-> " RESET);
         scanf("%d", &id);
         fseek(stdin, 0, SEEK_END);
         
         /* Delete the chosen element */
-        DeleteEntryFile(id);
+        DeleteBinaryData(id);
+        
+        do {
+            
+            printf(BOLDBLACK "\n1 - Return\n2 - Delete\n" RESET);
+            printf(BOLDBLACK "-> " RESET);
+            scanf("%c", &option);
+            fseek(stdin, 0, SEEK_END);
+            
+            switch (option) {
+                case '1':
+                    break;
+                    
+                case '2':
+                    return ExcludeEntry();
+                    
+                default:
+                    printf(BOLDRED "Invalid input. Try again.\n" RESET);
+                    break;
+            }
+            
+        } while (option != '1');
     }
     
 }

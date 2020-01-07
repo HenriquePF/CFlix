@@ -47,7 +47,7 @@ void EntryCatalog(void) {
             }
             
         } while (option != '1');
-    
+        
     } else if (IsEmptyFile(getFile) == 1) {
         printf(BOLDRED "\nFile does not exist.\nA file will be created if you register an entry.\n" RESET);
         CloseFileBinaryMode(getFile);

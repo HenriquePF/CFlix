@@ -79,12 +79,12 @@ void EditEntry() { // Check it IS or IS NOT empty....
         scanf("%d", &id);
         fseek(stdin, 0, SEEK_END);
         
-        EditBinData(id);
+        EditBinaryData(id);
         
         do {
             
             printf(BOLDBLACK "\n1 - Return\n2 - Edit\n" RESET);
-            printf("-> ");
+            printf(BOLDBLACK "-> " RESET);
             scanf("%c", &option);
             fseek(stdin, 0, SEEK_END);
             
@@ -96,7 +96,7 @@ void EditEntry() { // Check it IS or IS NOT empty....
                     return EditEntry();
                     
                 default:
-                    printf(BOLDRED "Invalid input HERE!. Try Again.\n" RESET);
+                    printf(BOLDRED "Invalid input. Try Again.\n" RESET);
                     break;
             }
         } while (option != '1');

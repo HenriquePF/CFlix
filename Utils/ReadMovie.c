@@ -71,7 +71,7 @@ void ReadId(int *previousId, int *resultId) {
 /* ReadText and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadText(char *previousText, char *resultText) {
     char elementName[199] = {0}, *newString = 0;
-    int isEmpty = 0;
+    int isEmpty = 0, isEmptyLine = 0;
     
     do {
         if (previousText) {
@@ -84,9 +84,14 @@ void ReadText(char *previousText, char *resultText) {
         fgets(elementName, sizeof(elementName), stdin);
         fseek(stdin, 0, SEEK_END);
         isEmpty = strcmp(elementName, "\n") == 0;
+        isEmptyLine = strcmp(elementName, " ") == 0;
         
         if (previousText && isEmpty) {
             break;
+        }
+        
+        if (isEmptyLine) {
+            printf(BOLDRED "TA VAZIO CUZAUM!.\n" RESET);
         }
         
         newString = StringTrimmer(elementName);
@@ -316,6 +321,7 @@ void GetEntriesFromFile() {
     fclose(filePtr);
 }
 
+// Used for Edit and Delete
 int FindEntryById(int inputId) {
     int entryIndex = 1; // starts with 1
     FILE *filePtr = 0;
@@ -334,7 +340,8 @@ int FindEntryById(int inputId) {
     return -1;
 }
 
-void EditBinData(int index) {
+/* Edit Entry File Function */
+void EditBinaryData(int index) {
     int newIndex = 0;
     FILE *filePtr = 0;
     struct filme readEntry = {0};
@@ -368,9 +375,9 @@ void EditBinData(int index) {
     fclose(filePtr);
 }
 
-/* Delete Entry File Function - LAST ONE */
-// check if entry is valid or not...
-void DeleteEntryFile(int index) {
+/* Delete Entry File Function */
+void DeleteBinaryData(int inputId) {
+    int indexDelete = 0;
     FILE *filePtr = 0; /* For Reading */
     FILE *filePtrTemp = 0; /* For Writing */
     struct filme readEntry = {0};
@@ -378,19 +385,24 @@ void DeleteEntryFile(int index) {
     filePtr = fopen(g_filePath, "rb"); /* Main file will get read - if file doesn't exist, returns NULL */
     filePtrTemp = fopen(g_filePathForRemove, "wb"); /* Second file will be written - If file doesn't exist, it'll create one*/
     
-    /* while there is entries to read */
-    while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
-        if (index == readEntry.entryId) { /* if index matches the entry id, the entry will get ignored */
-            printf(BOLDRED "\nEntry removed!\n" RESET);
-            getchar();
-        } else {
-            fwrite(&readEntry, sizeof(struct filme), 1, filePtrTemp); /* everything else will be written in the new file */
-        }
-    }
+    indexDelete = FindEntryById(inputId);
     
-    fclose(filePtr); /* Close both files */
-    fclose(filePtrTemp);
-    remove("CFlixRecords.bin"); /* Main file gets removed - It contains all the entries */
-    rename("CFlixRecordsTemp.bin", "CFlixRecords.bin"); /* New file gets the main file name */
+    if (indexDelete != -1) {
+        /* while there is entries to read */
+        while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
+            if (inputId == readEntry.entryId) { /* if inputId matches the entry id, the entry will get ignored */
+            } else {
+                fwrite(&readEntry, sizeof(struct filme), 1, filePtrTemp); /* everything else will be written in the new file */
+            }
+        }
+        
+        fclose(filePtr); /* Close both files */
+        fclose(filePtrTemp);
+        remove("CFlixRecords.bin"); /* Main file gets removed - It contains all the entries */
+        rename("CFlixRecordsTemp.bin", "CFlixRecords.bin"); /* New file gets the main file name */
+        
+    } else {
+        printf(BOLDRED "\nEntry not found!\n" RESET);
+    }
 }
 /* ------------ BINARY FILE FUNCTIONS ------------ */
