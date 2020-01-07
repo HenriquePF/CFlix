@@ -320,16 +320,20 @@ void GetEntriesFromFile() {
  * Returns entry index
  * Return -1 if not found
  */
-int MovieIndexById(int entryId) {
-    int entryIndex = 0;
+int MovieIndexById(int inputId) {
+    int entryIndex = 1;
     FILE *filePtr = 0;
     filePtr = fopen(g_filePath, "rb");
     struct filme readEntry = {0};
     
-    while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
-        if (entryIndex == entryId) {
-            return readEntry.entryId;
+    while (1) {
+        fread(&readEntry, sizeof(struct filme), 1, filePtr);
+
+        // Input is compared to the first element, if matched, it returns it's index
+        if (readEntry.entryId == inputId) {
+            return entryIndex;
         }
+        
         entryIndex++;
     }
     return -1;
@@ -344,12 +348,9 @@ void EditBinData(int index) {
     
     newIndex = MovieIndexById(index);
     
-    if (newIndex == -1) {
-        printf(BOLDRED "\nEntry not found!\n" RESET);
-    } else {
-        
-        /* fseek will set the user at the position of the wanted entry */
-        fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
+    if (newIndex != -1) {
+        /* fseek will set the pointer at the position of the entry PLUS one, which means we have to - 1 one position */
+        fseek(filePtr, (newIndex - 1) * sizeof(struct filme), SEEK_SET); // Find the struct
         
         /* fread will read the searched entry and display binary data in the struct format */
         fread(&readEntry, sizeof(struct filme), 1, filePtr);
@@ -360,10 +361,14 @@ void EditBinData(int index) {
         ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
         
         /* fseek back one element so fwrite is executed at the right spot */
-        fseek(filePtr, (index - 1) * sizeof(struct filme), SEEK_SET);
+        fseek(filePtr, (newIndex - 1) * sizeof(struct filme), SEEK_SET);
         
         /* fwrite the new element in the right spot */
         fwrite(&readEntry, sizeof(struct filme), 1, filePtr);
+        
+    } else {
+        printf(BOLDRED "\nEntry not found!\n" RESET);
+        
     }
     
     fclose(filePtr);
