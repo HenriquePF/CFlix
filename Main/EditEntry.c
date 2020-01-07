@@ -96,7 +96,7 @@ void EditEntry() { // Check it IS or IS NOT empty....
                     return EditEntry();
                     
                 default:
-                    printf(BOLDRED "Invalid input. Try Again.\n" RESET);
+                    printf(BOLDRED "Invalid input HERE!. Try Again.\n" RESET);
                     break;
             }
         } while (option != '1');

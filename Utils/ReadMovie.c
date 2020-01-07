@@ -181,7 +181,7 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
         } else {
             printf(BOLDRED "Invalid number. Try again.\n" RESET);
         }
-        
+        fseek(stdin, 0, SEEK_END);
     } while (!validDigit);
 }
 
@@ -373,7 +373,6 @@ void EditBinData(int index) {
 void DeleteEntryFile(int index) {
     FILE *filePtr = 0; /* For Reading */
     FILE *filePtrTemp = 0; /* For Writing */
-    int found = 0;
     struct filme readEntry = {0};
     
     filePtr = fopen(g_filePath, "rb"); /* Main file will get read - if file doesn't exist, returns NULL */
@@ -383,7 +382,7 @@ void DeleteEntryFile(int index) {
     while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
         if (index == readEntry.entryId) { /* if index matches the entry id, the entry will get ignored */
             printf(BOLDRED "\nEntry removed!\n" RESET);
-            found = 1;
+            getchar();
         } else {
             fwrite(&readEntry, sizeof(struct filme), 1, filePtrTemp); /* everything else will be written in the new file */
         }

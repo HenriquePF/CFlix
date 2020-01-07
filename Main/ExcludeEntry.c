@@ -78,8 +78,6 @@ void ExcludeEntry() {
         
         /* Delete the chosen element */
         DeleteEntryFile(id);
-        printf(BOLDRED "Press ENTER to leave.\n" RESET);
-        getchar();
     }
     
 }
