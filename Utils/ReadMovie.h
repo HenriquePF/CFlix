@@ -37,6 +37,7 @@ void GetEntriesFromFile(void);
 int FindEntryById(int entryId);
 void EditBinaryData(int index);
 void DeleteBinaryData(int index);
+//int CheckEntryId(void);
 /* File Functions */
 
 /* -------------------------------------------------------------- */

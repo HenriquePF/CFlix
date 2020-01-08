@@ -26,6 +26,6 @@ struct filme {
 void AddFilme(struct filme f);
 void DeleteFilme(struct Array *f ,int index);
 
-struct Array *GetFilmes(void);
+struct Array *GetEntries(void);
 
 #endif 

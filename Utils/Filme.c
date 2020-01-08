@@ -57,8 +57,6 @@ void AddFilme(struct filme f) {
     AddElement(&g_filmes, f);
 }
 
-struct Array *GetFilmes(void) {
-    // TODO: Fazer uma cópia
-    
+struct Array *GetEntries(void) {
     return &g_filmes;
 }

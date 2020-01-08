@@ -13,7 +13,7 @@
 #define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
 #define RESET       "\033[0m"              /* RESET */
 
-void EditEntry() { // Check it IS or IS NOT empty....
+void EditEntry() {
     
     ClearScreen();
     

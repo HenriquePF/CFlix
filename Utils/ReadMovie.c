@@ -21,7 +21,7 @@ const char *g_filePathForRemove = "./CFlixRecordsTemp.bin";
 void EntryEdit(int index) {
     
     /* Variables */
-    struct Array *entryEdit = GetFilmes();
+    struct Array *entryEdit = GetEntries();
     struct filme *f = {0};
     f = &(entryEdit->p[index - 1]);
     
@@ -38,10 +38,13 @@ void EntryEdit(int index) {
 
 /* ReadId and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadId(int *previousId, int *resultId) {
-    int validDigit = 0;
+    int validDigit = 0, isEmpty = 0;
     char userInput[5] = {0};
-    int isEmpty = 0;
+    FILE *getFile = 0;
+    struct filme readId = {0};
+    getFile = OpenFileBinaryMode();
     
+    // check if new id exists
     do {
         if (previousId) {
             printf(BOLDBLACK "\nEdit Id[%d]: " RESET, *previousId);
@@ -51,21 +54,38 @@ void ReadId(int *previousId, int *resultId) {
         }
         
         fgets(userInput, sizeof(userInput), stdin);
-        fseek(stdin, 0, SEEK_END);
         isEmpty = strcmp(userInput, "\n") == 0;
         validDigit = atoi(userInput);
         
+        // Check for matching ID's
+        while (fread(&readId, sizeof(struct filme), 1, getFile)) {
+            if (validDigit == readId.entryId) {
+                printf(BOLDRED "\nId already exists. Choose another FIRST.\n" RESET);
+                break;
+            }
+        }
+        
+        // if it's NOT empty AND the valid digit IS equal to readId.entryId - OK
+        if (!isEmpty && (validDigit == readId.entryId)) {
+            printf(BOLDRED "\nId already exists. Choose another SECOND.\n" RESET);
+        }
+        
+        
+        // If there IS a previous and it is empty = it will carry the old value - OK
         if (previousId && isEmpty) {
             break;
         }
         
-        if (validDigit) {
+        // if the value is valid and the valid digit IS NOT equal to readId.entryId = it will update the value - OK
+        if (validDigit && validDigit != readId.entryId) {
             *resultId = validDigit;
         } else {
             printf(BOLDRED "Invalid ID. Try again.\n" RESET);
         }
         
-    } while (!validDigit);
+        fseek(getFile, sizeof(struct filme), SEEK_SET);
+    } while (!validDigit || (validDigit == readId.entryId) || (!isEmpty && (validDigit == readId.entryId)));
+    CloseFileBinaryMode(getFile);
 }
 
 /* ReadText and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
@@ -240,7 +260,7 @@ void EntryConfirmation(struct filme newEntry) {
 /* Entry List -- File Function INSIDE -- NOT USED! */
 void EntryList() {
     /* Variables */
-    struct Array *entries = GetFilmes();
+    struct Array *entries = GetEntries();
     time_t r;
     struct tm dateStruct = {0};
     char dateFinal[11] = {0}, dateInitial[11] = {0};
@@ -274,6 +294,11 @@ void EntryList() {
 FILE *OpenFileBinaryMode() {
     FILE *filePtr = 0;
     filePtr = fopen(g_filePath, "rb");
+    
+    if (!filePtr) {
+        filePtr = fopen(g_filePath, "ab");
+    }
+    
     return filePtr;
 }
 
@@ -357,6 +382,9 @@ void EditBinaryData(int index) {
         fread(&readEntry, sizeof(struct filme), 1, filePtr);
         
         ReadId(&readEntry.entryId, &readEntry.entryId);
+        
+        // check if new id exists
+        
         ReadText(readEntry.nomeFilme, readEntry.nomeFilme);
         ReadDate(&readEntry.dataLancamento, &readEntry.dataLancamento);
         ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
