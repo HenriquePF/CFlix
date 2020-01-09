@@ -33,7 +33,7 @@ void EntryEdit(int index) {
     ReadId(&f->entryId, idEdit);
     ReadText(f->nomeFilme, nameEdit);
     ReadDate(&f->dataLancamento, dateEdit);
-    ReadNumber(&f->duracaoFilme, numEdit);
+    ReadNumber(&f->duracaoFilme, numEdit, "duration");
 }
 
 /* ReadId and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
@@ -177,7 +177,7 @@ void ReadDate(time_t *previousDate, time_t *resultDate) {
 }
 
 /* ReadNumber and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
-void ReadNumber(int *previousNumber, int *resultNumbers) {
+void ReadNumber(int *previousNumber, int *resultNumbers, char *fieldName) {
     int validDigit = 0;
     char userInputDuration[5] = {0};
     int isEmptyDuration = 0;
@@ -185,9 +185,9 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
     do {
         
         if (previousNumber) {
-            printf(BOLDBLACK "\nEdit Number[%d]: " RESET, *previousNumber);
+            printf(BOLDBLACK "\nEdit %s[%d]: " RESET, fieldName, *previousNumber);
         } else {
-            printf(BOLDBLACK "Read Number:\n" RESET);
+            printf(BOLDBLACK "Read %s:\n" RESET, fieldName);
             printf("-> ");
         }
         
@@ -202,7 +202,7 @@ void ReadNumber(int *previousNumber, int *resultNumbers) {
         if (validDigit) {
             *resultNumbers = validDigit;
         } else {
-            printf(BOLDRED "Invalid number. Try again.\n" RESET);
+            printf(BOLDRED "Invalid %s. Try again.\n" RESET, fieldName);
         }
         fseek(stdin, 0, SEEK_END);
     } while (!validDigit);
@@ -385,7 +385,7 @@ void EditBinaryData(int index) {
         ReadId(&readEntry.entryId, &readEntry.entryId);
         ReadText(readEntry.nomeFilme, readEntry.nomeFilme);
         ReadDate(&readEntry.dataLancamento, &readEntry.dataLancamento);
-        ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
+        ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme, "duration");
         
         /* fseek back one element so fwrite is executed at the right spot */
         fseek(filePtr, (newIndex - 1) * sizeof(struct filme), SEEK_SET);

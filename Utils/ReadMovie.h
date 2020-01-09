@@ -13,7 +13,7 @@ void ReadText(char *previousText, char *resultText);
 
 void ReadDate(time_t *previousDate, time_t *resultDate);
 
-void ReadNumber(int *previousNumber, int *resultNumber);
+void ReadNumber(int *previousNumber, int *resultNumbers, char *fieldName);
 /* Generic Functions */
 
 /* -------------------------------------------------------------- */

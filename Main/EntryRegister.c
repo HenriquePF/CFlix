@@ -30,7 +30,12 @@ void EntryRegister(void) {
     printf(BOLDBLACK "***** Entry Register - CFLIX *****\n" RESET);
     
     /* Read Text Function */
-    ReadId(NULL, id);
+    ReadNumber(NULL, id, "id");
+    
+    while (FindEntryById(*id) != -1) {
+        printf("Id already exists\n");
+        ReadNumber(NULL, id, "id");
+    }
     
     /* Read Text Function */
     ReadText(NULL, name);
@@ -39,7 +44,7 @@ void EntryRegister(void) {
     ReadDate(NULL, date);
     
     /* Read Number Function */
-    ReadNumber(NULL, num);
+    ReadNumber(NULL, num, "duration");
     
     /* Movie/Entry Confirmation Function */
     EntryConfirmation(newEntry);
