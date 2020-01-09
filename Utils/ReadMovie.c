@@ -44,47 +44,47 @@ void ReadId(int *previousId, int *resultId) {
     struct filme readId = {0};
     getFile = OpenFileBinaryMode();
     
-    // check if new id exists
-    do {
-        if (previousId) {
-            printf(BOLDBLACK "\nEdit Id[%d]: " RESET, *previousId);
-        } else {
-            printf(BOLDBLACK "\nRead Id:\n" RESET);
-            printf("-> ");
-        }
-        
-        fgets(userInput, sizeof(userInput), stdin);
-        isEmpty = strcmp(userInput, "\n") == 0;
-        validDigit = atoi(userInput);
-        
-        // Check for matching ID's
-        while (fread(&readId, sizeof(struct filme), 1, getFile)) {
-            if (validDigit == readId.entryId) {
-                printf(BOLDRED "\nId already exists. Choose another FIRST.\n" RESET);
-                break;
+    do { // Main do-while - Check if input is valid by comparison: \n, " "
+        do { // Secondary do-while - Check if ID is a duplicate
+            if (previousId) {
+                printf(BOLDBLACK "\nEdit Id[%d]: " RESET, *previousId);
+            } else {
+                printf(BOLDBLACK "\nRead Id:\n" RESET);
+                printf("-> ");
             }
-        }
+            
+            fgets(userInput, sizeof(userInput), stdin);
+            isEmpty = strcmp(userInput, "\n") == 0;
+            validDigit = atoi(userInput);
+            
+            while (fread(&readId, sizeof(struct filme), 1, getFile)) { // Not optimal...?
+                if (validDigit == readId.entryId) {
+                    printf(BOLDRED "\nId already exists. Choose another.\n" RESET);
+                    break;
+                }
+            }
+            
+            rewind(getFile); // rewind the file
+        } while (validDigit == readId.entryId);
         
         // if it's NOT empty AND the valid digit IS equal to readId.entryId - OK
         if (!isEmpty && (validDigit == readId.entryId)) {
-            printf(BOLDRED "\nId already exists. Choose another SECOND.\n" RESET);
+            printf(BOLDRED "\nId already exists. Choose another.\n" RESET);
         }
         
-        
-        // If there IS a previous and it is empty = it will carry the old value - OK
+        // If there IS a previous and it is empty = it will carry the old value
         if (previousId && isEmpty) {
             break;
         }
         
-        // if the value is valid and the valid digit IS NOT equal to readId.entryId = it will update the value - OK
-        if (validDigit && validDigit != readId.entryId) {
+        // Final check -> if not a validDigit, like " ", \n and alphanum...
+        if (validDigit) {
             *resultId = validDigit;
         } else {
             printf(BOLDRED "Invalid ID. Try again.\n" RESET);
         }
         
-        fseek(getFile, sizeof(struct filme), SEEK_SET);
-    } while (!validDigit || (validDigit == readId.entryId) || (!isEmpty && (validDigit == readId.entryId)));
+    } while (!validDigit);
     CloseFileBinaryMode(getFile);
 }
 
