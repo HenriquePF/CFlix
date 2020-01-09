@@ -44,8 +44,8 @@ void ReadId(int *previousId, int *resultId) {
     struct filme readId = {0};
     getFile = OpenFileBinaryMode();
     
-    do { // Main do-while - Check if input is valid by comparison: \n, " "
-        do { // Secondary do-while - Check if ID is a duplicate
+    do { // Main loop - Check if input is valid by comparison: \n, " ", ...
+        do { // Secondary do-while - ONLY checks if ID is a duplicate
             if (previousId) {
                 printf(BOLDBLACK "\nEdit Id[%d]: " RESET, *previousId);
             } else {
@@ -77,7 +77,7 @@ void ReadId(int *previousId, int *resultId) {
             break;
         }
         
-        // Final check -> if not a validDigit, like " ", \n and alphanum...
+        // Final check -> if not a validDigit, e.g " ", \n and alphanum...
         if (validDigit) {
             *resultId = validDigit;
         } else {
@@ -91,7 +91,7 @@ void ReadId(int *previousId, int *resultId) {
 /* ReadText and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadText(char *previousText, char *resultText) {
     char elementName[199] = {0}, *newString = 0;
-    int isEmpty = 0, isEmptyLine = 0;
+    int isEmpty = 0, isEmptyLine = 0, isZeroed = 0;
     
     do {
         if (previousText) {
@@ -110,24 +110,22 @@ void ReadText(char *previousText, char *resultText) {
             break;
         }
         
-        if (isEmptyLine) {
-            printf(BOLDRED "TA VAZIO CUZAUM!.\n" RESET);
-        }
-        
         newString = StringTrimmer(elementName);
+        isZeroed = strcmp(newString, "\0") == 0;
         
-        if (isEmpty && !previousText) {
-            printf(BOLDRED "Invalid text. Try again.\n" RESET);
+        if ((isEmpty && !previousText) || isZeroed) {
+            printf(BOLDRED "\nInvalid text. Try again.\n" RESET);
         }
         
-        if (!isEmpty) {
+        if (!isEmpty && !isZeroed) {
             strcpy(resultText, newString);
         }
         
         free(newString);
         newString = NULL;
-    } while (isEmpty);
+    } while (isEmpty || isZeroed != 0);
 }
+
 
 /* ReadDate and edit -- ARRAY FUNCTION! -- AUX. FOR FILE FUNCTIONS */
 void ReadDate(time_t *previousDate, time_t *resultDate) {
@@ -357,11 +355,14 @@ int FindEntryById(int inputId) {
         
         // Input is compared with element, if matched, it returns it's index
         if (readEntry.entryId == inputId) {
+            CloseFileBinaryMode(filePtr);
             return entryIndex;
         }
+        
         entryIndex++;
     }
     
+    CloseFileBinaryMode(filePtr);
     return -1;
 }
 
@@ -382,9 +383,6 @@ void EditBinaryData(int index) {
         fread(&readEntry, sizeof(struct filme), 1, filePtr);
         
         ReadId(&readEntry.entryId, &readEntry.entryId);
-        
-        // check if new id exists
-        
         ReadText(readEntry.nomeFilme, readEntry.nomeFilme);
         ReadDate(&readEntry.dataLancamento, &readEntry.dataLancamento);
         ReadNumber(&readEntry.duracaoFilme, &readEntry.duracaoFilme);
@@ -419,6 +417,7 @@ void DeleteBinaryData(int inputId) {
         /* while there is entries to read */
         while (fread(&readEntry, sizeof(struct filme), 1, filePtr)) {
             if (inputId == readEntry.entryId) { /* if inputId matches the entry id, the entry will get ignored */
+                printf(BOLDRED "\nEntry has been removed!\n" RESET);
             } else {
                 fwrite(&readEntry, sizeof(struct filme), 1, filePtrTemp); /* everything else will be written in the new file */
             }
